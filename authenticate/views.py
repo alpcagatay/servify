@@ -1,10 +1,15 @@
+from django.http import request
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from .forms import EditProfileForm, SignUpForm
-
+from urllib.parse import urlencode
+from urllib.parse import urlparse, parse_qsl
+from .models import Event, MyClubUser, Service, Venue
+from .forms import VenueForm
+from django.http import HttpResponseRedirect
 # Create your views here.
 def home(request):
     return render(request,'home.html',{})
@@ -97,3 +102,66 @@ def service_creation(request):
 
 def event_creation(request):
     return render(request, 'event_creation.html')
+
+
+
+def all_services(request):
+    service_list = Service.objects.all()
+    return render(request, 'all_services.html', {'service_list': service_list })
+
+def all_events(request):
+    event_list = Event.objects.all()
+    return render(request, 'all_events.html', {'event_list': event_list })
+
+def list_venues(request):
+    venue_list = Venue.objects.all()
+    return render(request, 'list_venues.html', {'venue_list': venue_list })
+
+def show_venue(request, venue_id):
+    venue = Venue.objects.get(pk = venue_id)
+    return render(request, 'show_venue.html', {'venue': venue })
+
+
+
+
+def add_venue(request):
+    submitted = False
+    if request.method == "POST":
+        form = VenueForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/add_venue?submitted=True')
+    else: 
+        form = VenueForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'add_venue.html', {'form':form, 'submitted':submitted})
+
+
+
+def mapindex(address_or_postalcode, data_type = 'json'):
+    #def extract_lat_lang
+    #Create Map Object
+    api_key = "AIzaSyA6k5eadUusSfdDx5GzCXFW_HlBekTN_VU"
+    data_type = 'json'
+    endpoint = f"https://maps.googleapis.com/maps/api/geocode/{data_type}"
+    params = {"address": address_or_postalcode, "key": api_key}
+    url_params = urlencode(params)
+    url = f"{endpoint}?{url_params}"
+    r = requests.get(url)
+    if r.status_code not in range(200,299):
+        return {}    
+    latlng = {}
+    try: 
+        return r.json(['results'])[0]['geometry']['location']
+    except:
+        pass
+    return latlng.get("lat"), latlng.get("lng")
+
+    parsed_url = urlparse(to_parse)
+    query_string = parsed_url.query
+    
+
+    return render(url, 'mapindex.html')
+
+

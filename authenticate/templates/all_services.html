@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+    <h1 class="text-center">Available Services</h1>
+    <ul>
+{% for service in service_list %}
+    <strong>{{ service}}</strong>
+    <ul>
+    <li>Date: {{ service.date}}</li>
+    <li>Description: {{ service.description}}</li>
+    <li>Maximum Number of Attendees: {{ service.number_of_attendees}}</li>
+    <li>Provided By: {{ service.provider}}</li>
+    <li>Venue Name:  {{ service.venue.name}}</li>
+    <li>Address: {{ service.venue.address}}</li>
+    <li>Attendees: </li>
+        {% for user in service.attendees.all %}
+        {{ user}}
+        <br>
+        {% endfor %}
+    
+   
+    </ul>
+{% endfor %}
+    </ul>
+{% endblock %}

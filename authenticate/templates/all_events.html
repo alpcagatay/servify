@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+    <h1 class="text-center">Available Events</h1>
+    <ul>
+{% for event in event_list %}
+    <strong>{{ event}}</strong>
+    <ul>
+    <li>Date: {{ event.date}}</li>
+    <li>Description: {{ event.description}}</li>
+    <li>Maximum Number of Attendees: {{ event.number_of_attendees}}</li>
+    <li>Provided By: {{ event.provider}}</li>
+    <li>Venue Name:  {{ event.venue.name}}</li>
+    <li>Address: {{ event.venue.address}}</li>
+    <li>Attendees: </li>
+        {% for user in event.attendees.all %}
+        {{ user}}
+        <br>
+        {% endfor %}
+    
+   
+    </ul>
+{% endfor %}
+    </ul>
+{% endblock %}
