@@ -34,22 +34,22 @@
                 <a class="nav-link active" aria-current="page" href="{% url 'change_password' %}">Change Password</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'service_creation' %}">Offer a Service</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'event_creation' %}">Create an Event</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'all_services' %}">Available Services</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'add_venue' %}">Add Venue</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'add_event' %}">Add Event</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'add_service' %}">Add Service</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'all_events' %}">Available Events</a>
               </li>
+             <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'list_services' %}">Available Services</a>
+              </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'list_venues' %}">List Venues</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'list_venues' %}">Created Venues</a>
               </li>
               {%else%}
 
@@ -75,10 +75,19 @@
               </li> -->
             
             </ul>
-            <form class="d-flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex" method=POST action = "{% url 'search_results' %}">
+              {% csrf_token %}
+              <input class="form-control me-2" type="search" placeholder="Search for Services" aria-label="Search" name= "searched">
               <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
+            
+            <form class="d-flex" method=POST action = "{% url 'search_results_events' %}">
+              {% csrf_token %}
+              <input class="form-control me-2" type="search" placeholder="Search for Events" aria-label="Search" name= "looked">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+
+
           </div>
         </div>
       </nav>

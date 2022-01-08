@@ -21,4 +21,14 @@ urlpatterns = [
     path('add_venue/', views.add_venue, name="add_venue"),
     path('list_venues/', views.list_venues, name="list_venues"),
     path('show_venue/<venue_id>', views.show_venue, name="show_venue"),
+    path('add_event/', views.add_event, name="add_event"),
+    path('list_events/', views.list_events, name="list_events"),
+    path('show_event/<event_id>', views.show_event, name="show_event"),
+    path('add_service/', views.add_service, name="add_service"),
+    path('list_services/', views.list_services, name="list_services"),
+    path('show_service/<service_id>', views.show_service, name="show_service"),
+    path('search_results', views.search_results, name="search_results"),
+    path('search_results_events', views.search_results_events, name="search_results_events"),
+
+
 ]

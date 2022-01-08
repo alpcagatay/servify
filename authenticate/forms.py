@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django import forms
 from django.db.models.base import Model
 from django.forms import fields, ModelForm, widgets
-from .models import Venue, Service, Event
+from .models import Venue, MyClubUser, Service, Event, Final_Event_Status, Final_Service_Status
 
 class EditProfileForm(UserChangeForm):
     password = forms.CharField(label = "" ,widget = forms.TextInput(attrs={'type':'hidden'}))
@@ -47,7 +47,7 @@ class VenueForm(ModelForm):
         model = Venue
         fields =  ('name','address',)
         labels = {
-            'name': 'Enter Your Address Here',
+            'name': 'Enter the name of the venue',
             'address':'',
         }
         widgets= {
@@ -58,14 +58,32 @@ class VenueForm(ModelForm):
 class ServiceForm(ModelForm):
     class Meta:
         model = Service
-        fields =  ('name','date','description','venue','credit','provider', 'attendees')
+        fields =  ('name','date','time','description','venue','attendees','credit','provider','service_picture')
         
         widgets= {
-            'name': forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the name of the address'}),
-            'date': forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the name of the address'}),
-            'description': forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the name of the address'}),
-            'venue': forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the name of the address'}),
-            'credit': forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the name of the address'}),
-            'provider': forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the name of the address'}),
-            'attendees': forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the name of the address'}),
+            'name': forms.TextInput(attrs={'class':'form-control','placeholder':'Service Name'}),
+            'date': forms.TextInput(attrs={'type':'date','class':'form-control','placeholder':''}),
+            'time': forms.TimeInput(attrs={'type':'time'}),
+            'description': forms.TextInput(attrs={'class':'form-control','placeholder':'Description'}),
+            'venue': forms.TextInput(attrs={'class':'form-control','placeholder':'Venue'}),
+            'attendees': forms.TextInput(attrs={'class':'form-control','placeholder':'Attendees'}),
+            'credit':forms.TextInput(attrs={'placeholder': 'Total Credit'}),
+            'provider':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Provider'})
+       }
+
+
+    
+
+class EventForm(ModelForm):
+    class Meta:
+        model = Event
+        fields =  ('name','date','time','description','venue','attendees','service_picture')
+        
+        widgets= {
+            'name': forms.TextInput(attrs={'class':'form-control','placeholder':'Event Name'}),
+            'date': forms.TextInput(attrs={'type':'date','class':'form-control','placeholder':''}),
+            'time': forms.TimeInput(attrs={'type':'time'}),
+            'description': forms.TextInput(attrs={'class':'form-control','placeholder':'Description'}),
+            'venue': forms.TextInput(attrs={'class':'form-control','placeholder':'Venue'}),
+            'attendees': forms.TextInput(attrs={'class':'form-control','placeholder':'Attendees'}),
        }

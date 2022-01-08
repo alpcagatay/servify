@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% if looked %}
+
+<h1>You searched for {{looked}}</h1>
+<br>
+{% for output in outputs %}
+    {{output}}
+
+    {%endfor%}
+
+{% else %}
+<h1>Ooops, you did not make a search</h1>
+{% endif %}
+
+
+  {% endblock %}

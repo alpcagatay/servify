@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+    <div class = "card-header">
+        Service
+    </div>
+<div class = "card-body">
+    <h5 class = "card-title"> {{service}}</h5>
+    <p class="card-text">
+        <ul>
+    {% for service in service_list%}
+        
+        
+     
+    <li>{{service.name}}</li>
+    <li>{{service.date}}</li>
+    <li>{{service.time}}</li>
+    <li>{{service.description}}</li>
+    <li>{{service.venue}}</li>
+    <li>{{service.provider}}</li>
+    <li>{{service.credit}}</li>
+    {% endfor %}
+    </ul>
+    <br>
+    {% if service.service_picture %}
+    {{service.service_image}}
+    {% endif %}
+  {% endblock %}

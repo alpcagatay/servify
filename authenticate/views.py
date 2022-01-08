@@ -4,12 +4,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
-from .forms import EditProfileForm, SignUpForm
+from .forms import EditProfileForm, EventForm, ServiceForm, SignUpForm
 from urllib.parse import urlencode
 from urllib.parse import urlparse, parse_qsl
 from .models import Event, MyClubUser, Service, Venue
 from .forms import VenueForm
 from django.http import HttpResponseRedirect
+from django.db.models import Q
+
+
 # Create your views here.
 def home(request):
     return render(request,'home.html',{})
@@ -137,6 +140,67 @@ def add_venue(request):
             submitted = True
     return render(request, 'add_venue.html', {'form':form, 'submitted':submitted})
 
+
+
+def add_event(request):
+    submitted = False
+    if request.method == "POST":
+        form = EventForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/add_event?submitted=True')
+    else: 
+        form = EventForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'add_event.html', {'form':form, 'submitted':submitted})
+
+def show_event(request, event_id):
+    event = Event.objects.get(pk = event_id)
+    return render(request, 'show_event.html', {'event': event })
+
+def list_events(request):
+    event_list = Event.objects.all()
+    return render(request, 'list_events.html', {'event_list': event_list })
+
+def search_results(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        result = Service.objects.filter(description__contains=searched)
+        return render(request, 'search_results.html', {'searched':searched, 'result':result })
+    else:
+        return render(request, 'search_results.html', {})
+
+def search_results_events(request):
+    if request.method == "POST":
+        looked = request.POST['looked']
+        outcome = Event.objects.filter(description__contains=looked)
+        return render(request, 'search_results_events.html', {'looked':looked, 'outcome':outcome })
+    else:
+        return render(request, 'search_results_events.html', {})
+
+
+
+def add_service(request):
+    submitted = False
+    if request.method == "POST":
+        form = ServiceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/add_service?submitted=True')
+    else: 
+        form = ServiceForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'add_service.html', {'form':form, 'submitted':submitted})
+
+def show_service(request, service_id):
+    event = Service.objects.get(pk = service_id)
+    return render(request, 'show_service.html', {'event': event })
+
+def list_services(request):
+    service_list = Service.objects.all()
+    return render(request, 'list_services.html', {'service_list': service_list })
 
 
 def mapindex(address_or_postalcode, data_type = 'json'):
