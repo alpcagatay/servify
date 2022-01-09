@@ -46,32 +46,33 @@ class SignUpForm(UserCreationForm):
 class ServiceForm(ModelForm):
     class Meta:
         model = Service
-        fields =  ('name','date','time','description','venue','attendees','credit','provider','service_picture')
+        fields =  ('name','date','time','description','venue','credit','provider')
         
         widgets= {
             'name': forms.TextInput(attrs={'class':'form-control','placeholder':'Service Name'}),
             'date': forms.TextInput(attrs={'type':'date','class':'form-control','placeholder':''}),
             'time': forms.TimeInput(attrs={'type':'time'}),
-            'description': forms.TextInput(attrs={'class':'form-control','placeholder':'Description'}),
+            'description': forms.Textarea(attrs={'class':'form-control','placeholder':'Description'}),
             'venue': forms.TextInput(attrs={'class':'form-control','placeholder':'Venue'}),
-            'attendees': forms.TextInput(attrs={'class':'form-control','placeholder':'Attendees'}),
             'credit':forms.TextInput(attrs={'placeholder': 'Total Credit'}),
-            'provider':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Provider'})
-       }
+            'provider': widgets.Select(attrs={'class':'form-control','placeholder':'Provider'}),
+              }
 
 
     
 
 class EventForm(ModelForm):
     class Meta:
+
         model = Event
-        fields =  ('name','date','time','description','venue','attendees','service_picture')
+        fields =  ('name','date','time','description','venue','provider',)
         
         widgets= {
             'name': forms.TextInput(attrs={'class':'form-control','placeholder':'Event Name'}),
             'date': forms.TextInput(attrs={'type':'date','class':'form-control','placeholder':''}),
             'time': forms.TimeInput(attrs={'type':'time'}),
-            'description': forms.TextInput(attrs={'class':'form-control','placeholder':'Description'}),
+            'description': forms.Textarea(attrs={'class':'form-control','placeholder':'Description'}),
             'venue': forms.TextInput(attrs={'class':'form-control','placeholder':'Venue'}),
-            'attendees': forms.TextInput(attrs={'class':'form-control','placeholder':'Attendees'}),
+            'provider': widgets.Select(attrs={'class':'form-control','placeholder':'Provider'}),
+
        }

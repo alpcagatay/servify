@@ -26,6 +26,14 @@
 
           </p>
         </div>
+        {% if user.is_authenticated %}
+        {% if user == event.provider %}
+        <div class="card-footer text-muted">
+            <a href="{% url 'update_service' service.id %}" class= "btn btn-outline-secondary btn-sm">Update Service</a>
+            <a href="{% url 'delete_service' service.id %}" class= "btn btn-outline-danger btn-sm">Delete Service</a>
+            {% endif %}
+            {% endif %}
+        </div>
       </div>
 
 

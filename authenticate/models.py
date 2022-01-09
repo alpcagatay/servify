@@ -33,6 +33,7 @@ class Service(models.Model):
     applied_ones = models.ManyToManyField(User,default="", blank=True, related_name='service_applied_ones')
     attendees = models.ManyToManyField(User,default="", blank=True, related_name='service_attendees')
     others = models.ManyToManyField(User, default="", blank=True, related_name='service_others')
+    owner = models.IntegerField("Service Owner", blank=False, default = 1) 
 
     ChoicesForService = ((1,'Open'),(2,'Closed'),(3,'Done'))
     status = models.PositiveIntegerField(choices=ChoicesForService, default = 1)
@@ -53,6 +54,7 @@ class Event(models.Model):
     applied_ones = models.ManyToManyField(User,default="", related_name='event_applied_ones')
     attendees = models.ManyToManyField(User,default="", blank=True, related_name='event_attendees')
     others = models.ManyToManyField(User, default="", blank=True, related_name='event_others')
+    owner = models.IntegerField("Event Owner", blank=False, default = 1) 
 
 
     ChoicesForService = ((1,'Open'),(2,'Closed'),(3,'Done'))

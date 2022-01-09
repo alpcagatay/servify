@@ -25,6 +25,10 @@ urlpatterns = [
     path('search_results', views.search_results, name="search_results"),
     path('search_result_events', views.search_result_events, name="search_results_events"),
     path('show_service2/<service_id>', views.show_service2, name="show_service2"),
+    path('update_event/<event_id>', views.update_event, name="update_event"),
+    path('update_service/<service_id>', views.update_service, name="update_service"),
+    path('delete_event/<event_id>', views.delete_event, name="delete_event"),
+    path('delete_service/<service_id>', views.delete_service, name="delete_service"),
 
 
 ]

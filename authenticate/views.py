@@ -139,6 +139,32 @@ def all_events(request):
 #             submitted = True
 #     return render(request, 'add_venue.html', {'form':form, 'submitted':submitted})
 
+def update_event(request,event_id):
+    event = Event.objects.get(pk = event_id)
+    form = EventForm(request.POST or None,instance = event)
+    if form.is_valid():
+        form.save()
+        return redirect('list_events')
+    return render(request, 'update_event.html', {'event':event, 'form': form})
+
+def update_service(request,service_id):
+    service = Service.objects.get(pk = service_id)
+    form = ServiceForm(request.POST or None,instance = service)
+    if form.is_valid():
+        form.save()
+        return redirect('list_services')
+    return render(request, 'update_service.html', {'service':service, 'form': form})
+
+def delete_event(request, event_id):
+    event = Event.objects.get(pk = event_id)
+    event.delete()
+    return HttpResponseRedirect('/list_events')
+
+def delete_service(request, service_id):
+    service = Service.objects.get(pk = service_id)
+    service.delete()
+    return HttpResponseRedirect('/list_services')
+
 
 
 def add_event(request):
@@ -146,13 +172,16 @@ def add_event(request):
     if request.method == "POST":
         form = EventForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            event = form.save(commit=False)
+            event.owner = request.user.id
+            event.save()
             return HttpResponseRedirect('/add_event?submitted=True')
     else: 
         form = EventForm
         if 'submitted' in request.GET:
             submitted = True
     return render(request, 'add_event.html', {'form':form, 'submitted':submitted})
+
 
 def show_event(request, event_id):
     event = Event.objects.get(pk = event_id)
@@ -185,7 +214,9 @@ def add_service(request):
     if request.method == "POST":
         form = ServiceForm(request.POST)
         if form.is_valid():
-            form.save()
+            service = form.save(commit=False)
+            service.owner = request.user.id
+            service.save()
             return HttpResponseRedirect('/add_service?submitted=True')
     else: 
         form = ServiceForm
