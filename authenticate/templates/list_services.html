@@ -3,15 +3,33 @@
 {% block content %}
 
 
-    <center>
-    <h1 class="text-center">Services</h1>
+
+    <h1>List Services</h1>
     
-    {% for service in service_list%}
-        <a href="{% url 'show_service' service.id %}">{{service}}</a>
-        <br>
+    {% for service in service_list %}
+
+    <div class="card">
+        <div class="card-header">
+            <a href="{% url 'show_service' service.id %}">     {{ service }}</a>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Venue: {{service.venue}}</h5>
+          <p class="card-text">
+
+            <ul>
+                
+                <li>on <strong>{{service.date}}</strong> at <strong>{{service.time}}</strong></li>
+                <li>Credit:         <strong>{{service.credit}}</strong></li>
+                <li>Provided by:    </strong>{{service.provider}}</strong></li>
+                
+            </ul>
+
+          </p>
+        </div>
+      </div>
+
+
+    <br>
     {% endfor %}
 
-    </center>
-
-
-  {% endblock %}
+    {% endblock %}

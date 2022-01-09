@@ -34,23 +34,18 @@
                 <a class="nav-link active" aria-current="page" href="{% url 'change_password' %}">Change Password</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'add_venue' %}">Add Venue</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'add_event' %}">Add Event</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'add_service' %}">Add Service</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'all_events' %}">Available Events</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'list_events' %}">Available Events</a>
               </li>
              <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'list_services' %}">Available Services</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'list_venues' %}">Created Venues</a>
-              </li>
+             
               {%else%}
 
               <li class="nav-item">

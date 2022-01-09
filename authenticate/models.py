@@ -11,13 +11,6 @@ from django.contrib.auth.models import User
 
 
 
-class Venue(models.Model):
-    name = models.CharField('Venue Name', max_length=120)
-    address = models.TextField('Venue Address')
-    
-    def __str__(self):
-        return self.name
-
 class MyClubUser(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     bio = models.TextField()
@@ -26,18 +19,18 @@ class MyClubUser(models.Model):
     onholdcredit = models.PositiveIntegerField(default=0, validators = [MaxValueValidator(15), MinValueValidator(0)])
 
     def __str__(self):
-        return self.name
+        return str(self.user)
 
 class Service(models.Model):
     name = models.CharField('Service Name', max_length=120)
     date = models.DateField('Service Date', blank=True, null = True)
     time = models.TimeField(default='12:00')
     description=models.TextField()
-    venue = models.ForeignKey(Venue, blank=True, null=True, on_delete=models.CASCADE)
+    venue = models.CharField('Venue Name', max_length=120)
     credit = models.PositiveIntegerField()
     service_picture = models.ImageField(null=True, blank=True)
     provider = models.ForeignKey(User,default="", on_delete=models.CASCADE, related_name='service_provider')
-    applied_ones = models.ManyToManyField(User,default="", null=True, blank=True, related_name='service_applied_ones')
+    applied_ones = models.ManyToManyField(User,default="", blank=True, related_name='service_applied_ones')
     attendees = models.ManyToManyField(User,default="", blank=True, related_name='service_attendees')
     others = models.ManyToManyField(User, default="", blank=True, related_name='service_others')
 
@@ -53,13 +46,13 @@ class Event(models.Model):
     date = models.DateField('Event Date', blank=True, null = True)
     time = models.TimeField(default='12:00')
     description=models.TextField()
-    venue = models.ForeignKey(Venue, blank=True, null=True, on_delete=models.CASCADE)
+    venue = models.CharField('Venue Name', max_length=120)
     credit = models.PositiveIntegerField(default=0)
     service_picture = models.ImageField(null=True, blank=True)
-    provider = models.ForeignKey(User,default="", on_delete=models.CASCADE, related_name='event_provider')
-    applied_ones = models.ManyToManyField(User,default="", blank=True, related_name='event_applied_ones')
+    provider = models.ForeignKey(User,default="", null=True, on_delete=models.SET_NULL, related_name='event_provider')
+    applied_ones = models.ManyToManyField(User,default="", related_name='event_applied_ones')
     attendees = models.ManyToManyField(User,default="", blank=True, related_name='event_attendees')
-    others = models.ManyToManyField(User, default="", null=True, blank=True, related_name='event_others')
+    others = models.ManyToManyField(User, default="", blank=True, related_name='event_others')
 
 
     ChoicesForService = ((1,'Open'),(2,'Closed'),(3,'Done'))
@@ -70,8 +63,8 @@ class Event(models.Model):
 
 
 class Final_Event_Status(models.Model):
-    user_final_status = models.ManyToManyField(User, default="", null=True, blank=True, related_name='event_user_status')
-    event_final_status = models.ManyToManyField(Service, default="", null=True, related_name='event_final_status')
+    user_final_status = models.ManyToManyField(User, default="", related_name='event_user_status')
+    event_final_status = models.ManyToManyField(Service, default="", related_name='event_final_status')
 
     choices = ((1,'Applied'), (2,'Accepted'),(3,'Completed'), (4,'Not Completed'),(5,'Rejected'))
     user_final_status = models.PositiveIntegerField(choices=choices)
@@ -80,8 +73,8 @@ class Final_Event_Status(models.Model):
 # Create your models here.
 
 class Final_Service_Status(models.Model):
-    user_final_status = models.ManyToManyField(User, default="", null=True, blank=True, related_name='service_user_status')
-    service_final_status = models.ManyToManyField(Service, default="", null=True,related_name='service_final_status')
+    user_final_status = models.ManyToManyField(User, default="", blank=True, related_name='service_user_status')
+    service_final_status = models.ManyToManyField(Service, default="", related_name='service_final_status')
 
     choices = ((1,'Applied'), (2,'Accepted'),(3,'Completed'), (4,'Not Completed'),(5,'Rejected'))
     user_final_status = models.PositiveIntegerField(choices=choices)

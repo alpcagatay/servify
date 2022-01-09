@@ -3,20 +3,52 @@
 {% block content %}
 
 
+{% if looked %}
 
-<h1 class="text-center">Service Detail</h1>
+<h1>You looked for {{looked}}</h1>
 <br>
 
-<br>
-<h2> Details will be listed here</h2>
+
+{% for outcomes in outcome %}
+   
+
+
+    <div class="card">
+      <div class="card-header">
+        <a href="{% url 'show_event' outcomes.id %}">    {{ outcomes }}</a>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{outcomes.venue}}</h5>
+        <p class="card-text">
+
+          <ul>
+      
+              <li>Date:           {{outcomes.date}}</li>
+              <li>Time:           {{outcomes.time}}</li>
+              <li>Description:    {{outcomes.description}}</li>
+              <li>Credit:         {{outcomes.credit}}</li>
+              <li>Status:    {{outcomes.status.1}}</li>
+              <li>Provided by:    {{outcomes.provider}}</li>
+              
+              <li>Attendees:      </li>
+              {% for user in outcomes.attendees.all %}
+              {{user}}
+              <br>
+              {% endfor %}
+          </ul>
+
+        </p>
+      </div>
+    </div>
 
 
 
-{%if user.is_authenticated %}
+    
+    {%endfor%}
 
-<p>Information will be included in here</p>
+{% else %}
+<h1>Ooops, you did not make a search</h1>
+{% endif %}
 
-
-{%endif%}
 
   {% endblock %}

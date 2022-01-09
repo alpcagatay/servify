@@ -7,9 +7,42 @@
 
 <h1>You searched for {{searched}}</h1>
 <br>
-{% for result in results %}
-    {{result}}
 
+
+{% for results in result %}
+   
+
+
+    <div class="card">
+      <div class="card-header">
+        <a href="{% url 'show_service' results.id %}"> {{ results }}</a>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{results.venue}}</h5>
+        <p class="card-text">
+
+          <ul>
+            
+              <li>Date:           {{results.date}}</li>
+              <li>Time:           {{results.time}}</li>
+              <li>Credit:         {{results.credit}}</li>
+              <li>Status:    {{results.status.1}}</li>
+              <li>Provided by:    {{results.provider}}</li>
+              
+              <li>Attendees:      </li>
+              {% for user in results.attendees.all %}
+              {{user}}
+              <br>
+              {% endfor %}
+          </ul>
+
+        </p>
+      </div>
+    </div>
+
+
+
+    
     {%endfor%}
 
 {% else %}

@@ -5,7 +5,7 @@
 
 <div class="card">
     <div class = "card-header">
-       <strong>{{ service }}</strong> 
+       <strong>{{ service2 }}</strong> 
       
     </div>
 <div class = "card-body">
@@ -14,14 +14,14 @@
       
     <p></p>
     
-    <p>Date: <strong>{{service.date}}</strong></p>
-    <p>Time: <strong>{{service.time}}</strong></p>
-    <p>Description: <strong>{{service.description}}</strong></p>
-    <p>Venue: <strong>{{service.venue}}</strong></p>
-    <p>Provided by: <strong>{{service.provider}}</strong></p>
-    <p>Credit: <strong>{{service.credit}}</strong></p>
+    <p>Date: <strong>{{service2.date}}</strong></p>
+    <p>Time: <strong>{{service2.time}}</strong></p>
+    <p>Description: <strong>{{service2.description}}</strong></p>
+    <p>Venue: <strong>{{service2.venue}}</strong></p>
+    <p>Provided by: <strong>{{service2.provider}}</strong></p>
+    <p>Credit: <strong>{{service2.credit}}</strong></p>
     <p>Attendees:      </p>
-                {% for user in service.attendees.all %}
+                {% for user in service2.attendees.all %}
                 <strong>{{user}}</strong>
                 <br>
                 {% endfor %}

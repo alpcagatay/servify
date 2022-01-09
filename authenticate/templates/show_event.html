@@ -3,25 +3,31 @@
 {% block content %}
 
 
-
-
-{% for event in event_list %}
-    <strong>{{ event}}</strong>
-    <ul>
-    <li>Date: {{ event.date}}</li>
-    <li>Description: {{ event.description}}</li>
-    <li>Maximum Number of Attendees: {{ event.number_of_attendees}}</li>
-    <li>Provided By: {{ event.provider}}</li>
-    <li>Venue Name:  {{ event.venue.name}}</li>
-    <li>Address: {{ event.venue.address}}</li>
-    <li>Attendees: </li>
-        {% for user in event.attendees.all %}
-        {{ user}}
-        <br>
-        {% endfor %}
+<div class="card">
+    <div class = "card-header">
+       <strong>{{ event }}</strong> 
+      
+    </div>
+<div class = "card-body">
+     <h5 class = "card-title">  </h5>
+    <p class="card-text">
+      
+    <p></p>
     
-   
-    </ul>
-{% endfor %}
-    </ul>
-{% endblock %}
+    <p>Date: <strong>{{event.date}}</strong></p>
+    <p>Time: <strong>{{event.time}}</strong></p>
+    <p>Description: <strong>{{event.description}}</strong></p>
+    <p>Venue: <strong>{{event.venue}}</strong></p>
+    <p>Provided by: <strong>{{event.provider}}</strong></p>
+    <p>Credit: <strong>{{event.credit}}</strong></p>
+    <p>Attendees:      </p>
+                {% for user in event.attendees.all %}
+                <strong>{{user}}</strong>
+                <br>
+                {% endfor %}
+    
+    <br>
+    <!-- {% if event.event_picture %}
+    {{event.event_image}}
+    {% endif %}
+  {% endblock %} -->

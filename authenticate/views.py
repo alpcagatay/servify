@@ -7,8 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, Password
 from .forms import EditProfileForm, EventForm, ServiceForm, SignUpForm
 from urllib.parse import urlencode
 from urllib.parse import urlparse, parse_qsl
-from .models import Event, MyClubUser, Service, Venue
-from .forms import VenueForm
+from .models import Event, MyClubUser, Service
 from django.http import HttpResponseRedirect
 from django.db.models import Q
 
@@ -110,35 +109,35 @@ def event_creation(request):
 
 def all_services(request):
     service_list = Service.objects.all()
-    return render(request, 'all_services.html', {'service_list': service_list })
+    return render(request, 'list_services.html', {'service_list': service_list })
 
 def all_events(request):
     event_list = Event.objects.all()
-    return render(request, 'all_events.html', {'event_list': event_list })
+    return render(request, 'list_events.html', {'event_list': event_list })
 
-def list_venues(request):
-    venue_list = Venue.objects.all()
-    return render(request, 'list_venues.html', {'venue_list': venue_list })
+# def list_venues(request):
+#     venue_list = Venue.objects.all()
+#     return render(request, 'list_venues.html', {'venue_list': venue_list })
 
-def show_venue(request, venue_id):
-    venue = Venue.objects.get(pk = venue_id)
-    return render(request, 'show_venue.html', {'venue': venue })
-
-
+# def show_venue(request, venue_id):
+#     venue = Venue.objects.get(pk = venue_id)
+#     return render(request, 'show_venue.html', {'venue': venue })
 
 
-def add_venue(request):
-    submitted = False
-    if request.method == "POST":
-        form = VenueForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/add_venue?submitted=True')
-    else: 
-        form = VenueForm
-        if 'submitted' in request.GET:
-            submitted = True
-    return render(request, 'add_venue.html', {'form':form, 'submitted':submitted})
+
+
+# def add_venue(request):
+#     submitted = False
+#     if request.method == "POST":
+#         form = VenueForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect('/add_venue?submitted=True')
+#     else: 
+#         form = VenueForm
+#         if 'submitted' in request.GET:
+#             submitted = True
+#     return render(request, 'add_venue.html', {'form':form, 'submitted':submitted})
 
 
 
@@ -171,13 +170,13 @@ def search_results(request):
     else:
         return render(request, 'search_results.html', {})
 
-def search_results_events(request):
+def search_result_events(request):
     if request.method == "POST":
         looked = request.POST['looked']
         outcome = Event.objects.filter(description__contains=looked)
-        return render(request, 'search_results_events.html', {'looked':looked, 'outcome':outcome })
+        return render(request, 'search_result_events.html', {'looked':looked, 'outcome':outcome })
     else:
-        return render(request, 'search_results_events.html', {})
+        return render(request, 'search_result_events.html', {})
 
 
 
@@ -195,8 +194,18 @@ def add_service(request):
     return render(request, 'add_service.html', {'form':form, 'submitted':submitted})
 
 def show_service(request, service_id):
-    event = Service.objects.get(pk = service_id)
-    return render(request, 'show_service.html', {'event': event })
+    service = Service.objects.get(pk = service_id)
+    return render(request, 'show_service.html', {'service': service })
+
+def show_service2(request, service_id2):
+    service2 = Service.objects.get(pk = service_id2)
+    return render(request, 'show_service2.html', {'service2': service2 })
+
+
+def show_service_search(request, service_id):
+    service = Service.objects.get(pk = service_id)
+    return render(request, 'show_service.html', {'service': service })
+
 
 def list_services(request):
     service_list = Service.objects.all()

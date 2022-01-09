@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django import forms
 from django.db.models.base import Model
 from django.forms import fields, ModelForm, widgets
-from .models import Venue, MyClubUser, Service, Event, Final_Event_Status, Final_Service_Status
+from .models import MyClubUser, Service, Event, Final_Event_Status, Final_Service_Status
 
 class EditProfileForm(UserChangeForm):
     password = forms.CharField(label = "" ,widget = forms.TextInput(attrs={'type':'hidden'}))
@@ -42,18 +42,6 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].widget.attrs['placeholder']= 'Confirm Password'
         self.fields['password2'].label = ''
 
-class VenueForm(ModelForm):
-    class Meta:
-        model = Venue
-        fields =  ('name','address',)
-        labels = {
-            'name': 'Enter the name of the venue',
-            'address':'',
-        }
-        widgets= {
-            'name': forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the name of the address'}),
-            'address':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter the address'}),
-        }
 
 class ServiceForm(ModelForm):
     class Meta:

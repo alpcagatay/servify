@@ -3,15 +3,33 @@
 {% block content %}
 
 
-    <center>
-    <h1 class="text-center">Events</h1>
+
+    <h1>List Events</h1>
     
-    {% for event in event_list%}
-        <a href="{% url 'show_event' event.id %}">{{event}}</a>
-        <br>
+    {% for event in event_list %}
+
+    <div class="card">
+        <div class="card-header">
+            <a href="{% url 'show_event' event.id %}">     {{ event }}</a>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Venue: {{event.venue}}</h5>
+          <p class="card-text">
+
+            <ul>
+                
+                <li>on <strong>{{event.date}}</strong> at <strong>{{event.time}}</strong></li>
+                <li>Credit:         <strong>{{event.credit}}</strong></li>
+                <li>Provided by:    </strong>{{event.provider}}</strong></li>
+                
+            </ul>
+
+          </p>
+        </div>
+      </div>
+
+
+    <br>
     {% endfor %}
 
-    </center>
-
-
-  {% endblock %}
+    {% endblock %}
