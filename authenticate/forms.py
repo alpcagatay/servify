@@ -21,7 +21,7 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username','first_name','last_name','email','password1','password2',)
+        fields = ('username','first_name','last_name','email','password1','password2')
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args,**kwargs)
@@ -46,8 +46,17 @@ class SignUpForm(UserCreationForm):
 class ServiceForm(ModelForm):
     class Meta:
         model = Service
-        fields =  ('name','date','time','description','venue','credit','provider')
-        
+        fields =  ('name','date','time','description','venue','credit','provider', 'service_picture')
+        labels = {
+            'name':'',
+            'date':'',
+            'time':'',
+            'description':'',
+            'venue':'',
+            'credit':'',
+            'provider':'',
+            'service_picture':''
+        }
         widgets= {
             'name': forms.TextInput(attrs={'class':'form-control','placeholder':'Service Name'}),
             'date': forms.TextInput(attrs={'type':'date','class':'form-control','placeholder':''}),
@@ -65,8 +74,17 @@ class EventForm(ModelForm):
     class Meta:
 
         model = Event
-        fields =  ('name','date','time','description','venue','provider',)
-        
+        fields =  ('name','date','time','description','venue','provider','event_picture')
+        labels = {
+            'name':'',
+            'date':'',
+            'time':'',
+            'description':'',
+            'venue':'',
+            'credit':'',
+            'provider':'',
+            'event_picture':''
+        }
         widgets= {
             'name': forms.TextInput(attrs={'class':'form-control','placeholder':'Event Name'}),
             'date': forms.TextInput(attrs={'type':'date','class':'form-control','placeholder':''}),

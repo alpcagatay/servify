@@ -1,20 +1,44 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 
 
 
 <h1 class="text-center">User Profile</h1>
 <br>
+<h2>Hello {{user}}</h2>
+
+{% if user.myclubuser.profile_picture %}
+<img src="{{user.myclubuser.profile_picture.url}}" width = 300 class="rounded-circle">
+
+
+{% else %}
+<img src="" width = 300 class="rounded-circle">
 
 <br>
-<h2> Details will be listed here</h2>
+<br>
+{% endif %}
+<p> 
+  Username: <strong>{{user.username}}</strong>
+  <br>
+  First name: <strong>{{user.first_name}}</strong>
+  <br>
+  Last name: <strong>{{user.last_name}}</strong>
+</p>
+<br>
+  Bio: <strong>{{user.myclubuser.bio}}</strong>
+  <br>
+<br>
+  Available credits: <strong>{{user.credit}}</strong>
+  <br>
+
+  
 
 
 
 {%if user.is_authenticated %}
 
-<p>Information will be included in here</p>
+
 
 
 {%endif%}

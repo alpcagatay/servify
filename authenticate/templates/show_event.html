@@ -6,19 +6,27 @@
 <div class="card">
     <div class = "card-header">
        <strong>{{ event }}</strong> 
+     
       
+
     </div>
 <div class = "card-body">
      <h5 class = "card-title">  </h5>
     <p class="card-text">
       
     <p></p>
-    
+
+    {% if event.event_picture %}
+    <img src="{{event.event_picture.url}}" width = 500>
+    {% endif %}
+
+    <br>
+    <br>
     <p>Date: <strong>{{event.date}}</strong></p>
     <p>Time: <strong>{{event.time}}</strong></p>
     <p>Description: <strong>{{event.description}}</strong></p>
     <p>Venue: <strong>{{event.venue}}</strong></p>
-    <p>Provided by: <strong>{{event.provider}}</strong></p>
+    <p>Provided by: <strong>{{event_owner}}</strong></p>
     <p>Credit: <strong>{{event.credit}}</strong></p>
     <p>Attendees:      </p>
                 {% for user in event.attendees.all %}
@@ -27,6 +35,13 @@
                 {% endfor %}
     
     <br>
+    <br>
+
+                <a href="{% url 'update_event' event.id %}" class= "btn btn-outline-secondary btn-sm">Update event</a>
+                <a href="{% url 'delete_event' event.id %}" class= "btn btn-outline-danger btn-sm">Delete event</a>
+    
+    <br>
+ 
     <!-- {% if event.event_picture %}
     {{event.event_image}}
     {% endif %}

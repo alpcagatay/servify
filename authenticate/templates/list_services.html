@@ -15,7 +15,10 @@
         <div class="card-body">
           <h5 class="card-title">Venue: {{service.venue}}</h5>
           <p class="card-text">
-
+            <br>
+            {% if service.service_picture %}
+            <img src="{{service.service_picture.url}}" width = 300>
+            {% endif %}
             <ul>
                 
                 <li>on <strong>{{service.date}}</strong> at <strong>{{service.time}}</strong></li>
@@ -27,13 +30,14 @@
           </p>
         </div>
         {% if user.is_authenticated %}
-        {% if user == event.provider %}
+        {% if user == service.provider %}
         <div class="card-footer text-muted">
             <a href="{% url 'update_service' service.id %}" class= "btn btn-outline-secondary btn-sm">Update Service</a>
             <a href="{% url 'delete_service' service.id %}" class= "btn btn-outline-danger btn-sm">Delete Service</a>
+          </div>
             {% endif %}
             {% endif %}
-        </div>
+        
       </div>
 
 

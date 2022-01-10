@@ -6,21 +6,26 @@
 
     <h1>List Events</h1>
     
-    {% for events in event_list %}
+    {% for event in event_list %}
 
     <div class="card">
         <div class="card-header">
-            <a href="{% url 'show_event' events.id %}">     {{ events }}</a>
+            <a href="{% url 'show_event' event.id %}">     {{ event }}</a>
         </div>
         <div class="card-body">
           <h5 class="card-title">Venue: {{event.venue}}</h5>
+          <br>
+          {% if event.event_picture %}
+    <img src="{{event.event_picture.url}}" width = 300>
+    {% endif %}
+
           <p class="card-text">
 
             <ul>
                 
-                <li>on <strong>{{events.date}}</strong> at <strong>{{events.time}}</strong></li>
-                <li>Credit:         <strong>{{events.credit}}</strong></li>
-                <li>Provided by:    </strong>{{events.provider}}</strong></li>
+                <li>on <strong>{{event.date}}</strong> at <strong>{{event.time}}</strong></li>
+                <li>Credit:         <strong>{{event.credit}}</strong></li>
+                <li>Provided by:    </strong>{{event.provider}}</strong></li>
                 
             </ul>
 
@@ -29,9 +34,9 @@
         {% if user.is_authenticated %}
         {% if user == event.provider %}
         <div class="card-footer text-muted">
-            <a href="{% url 'update_event' events.id %}" class= "btn btn-outline-secondary btn-sm">Update Event</a>
-            <a href="{% url 'delete_event' events.id %}" class= "btn btn-outline-danger btn-sm">Delete Event</a>
-        </div>
+            <a href="{% url 'update_event' event.id %}" class= "btn btn-outline-secondary btn-sm">Update event</a>
+            <a href="{% url 'delete_event' event.id %}" class= "btn btn-outline-danger btn-sm">Delete event</a>
+          </div>
             {% endif %}
             {% endif %}
         

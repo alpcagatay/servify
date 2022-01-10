@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1 class="text-center">Edit Profile</h1>
-
+{{user.myclubuser.bio}}
 
 <form method="POST" action="{% url 'edit_profile' %}">
     {%csrf_token%}

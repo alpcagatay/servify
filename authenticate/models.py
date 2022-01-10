@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 class MyClubUser(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     bio = models.TextField()
-    profile_picture = models.ImageField(null=True, blank=True, upload_to = "images/")
+    profile_picture = models.ImageField(null=True, blank=True, upload_to = "images/profile/")
     credit = models.PositiveBigIntegerField(default=5, validators = [MaxValueValidator(15),MinValueValidator(0) ])
     onholdcredit = models.PositiveIntegerField(default=0, validators = [MaxValueValidator(15), MinValueValidator(0)])
 
@@ -34,6 +34,8 @@ class Service(models.Model):
     attendees = models.ManyToManyField(User,default="", blank=True, related_name='service_attendees')
     others = models.ManyToManyField(User, default="", blank=True, related_name='service_others')
     owner = models.IntegerField("Service Owner", blank=False, default = 1) 
+    service_picture = models.ImageField(null=True, blank=True, upload_to = "images/")
+
 
     ChoicesForService = ((1,'Open'),(2,'Closed'),(3,'Done'))
     status = models.PositiveIntegerField(choices=ChoicesForService, default = 1)
@@ -55,6 +57,7 @@ class Event(models.Model):
     attendees = models.ManyToManyField(User,default="", blank=True, related_name='event_attendees')
     others = models.ManyToManyField(User, default="", blank=True, related_name='event_others')
     owner = models.IntegerField("Event Owner", blank=False, default = 1) 
+    event_picture = models.ImageField(null=True, blank=True, upload_to = "images/")
 
 
     ChoicesForService = ((1,'Open'),(2,'Closed'),(3,'Done'))
@@ -81,3 +84,11 @@ class Final_Service_Status(models.Model):
     choices = ((1,'Applied'), (2,'Accepted'),(3,'Completed'), (4,'Not Completed'),(5,'Rejected'))
     user_final_status = models.PositiveIntegerField(choices=choices)
 
+class Measurement(models.Model):
+    location = models.CharField(max_length=200)
+    destination = models.CharField(max_length=200)
+    distance = models.DecimalField(max_digits=10, decimal_places=2)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Distance from {self.location} to {self.destination} is {self.distance} km"

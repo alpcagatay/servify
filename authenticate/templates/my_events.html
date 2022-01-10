@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+<h2 class="text-center">My Events</h2>
+<br>
+
+<ul>
+{% for event in events %}
+
+
+<li><a href="{% url 'show_event' event.id %}">     {{ event }}</a> at {{event.venue}} | {{event.time}} </li>
+{% if event.event_picture %}
+<img src="{{event.event_picture.url}}" width = 300>
+{% endif %}
+    <br>
+   
+
+
+
+{% endfor %}
+</ul>
+
+  {% endblock %}

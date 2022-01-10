@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+<h2 class="text-center">My Services</h2>
+<br>
+{{user.myclubuser.bio}}
+<ul>
+{% for service in services %}
+<li><a href="{% url 'show_service' service.id %}">     {{ service }}</a> at {{service.venue}} | {{service.time}} </li>
+    
+    {% if service.service_picture %}
+    <img src="{{service.service_picture.url}}" width="300">
+    {% endif %}
+    <br>
+
+
+{% endfor %}
+</ul>
+
+  {% endblock %}

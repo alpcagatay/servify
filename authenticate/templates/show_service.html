@@ -11,7 +11,12 @@
 <div class = "card-body">
      <h5 class = "card-title">  </h5>
     <p class="card-text">
+    
       
+    {% if service.service_picture %}
+    <img src="{{service.service_picture.url}}" width = 500>
+    {% endif %}
+
     <p></p>
     
     <p>Date: <strong>{{service.date}}</strong></p>
@@ -25,7 +30,8 @@
                 <strong>{{user}}</strong>
                 <br>
                 {% endfor %}
-    
+                <a href="{% url 'update_service' service.id %}" class= "btn btn-outline-secondary btn-sm">Update Service</a>
+                <a href="{% url 'delete_service' service.id %}" class= "btn btn-outline-danger btn-sm">Delete Service</a>
     <br>
     <!-- {% if service.service_picture %}
     {{service.service_image}}

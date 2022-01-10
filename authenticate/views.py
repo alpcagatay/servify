@@ -10,6 +10,8 @@ from urllib.parse import urlparse, parse_qsl
 from .models import Event, MyClubUser, Service
 from django.http import HttpResponseRedirect
 from django.db.models import Q
+from django.contrib import messages
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -141,7 +143,7 @@ def all_events(request):
 
 def update_event(request,event_id):
     event = Event.objects.get(pk = event_id)
-    form = EventForm(request.POST or None,instance = event)
+    form = EventForm(request.POST or None,request.FILES,instance = event)
     if form.is_valid():
         form.save()
         return redirect('list_events')
@@ -149,7 +151,7 @@ def update_event(request,event_id):
 
 def update_service(request,service_id):
     service = Service.objects.get(pk = service_id)
-    form = ServiceForm(request.POST or None,instance = service)
+    form = ServiceForm(request.POST or None,request.FILES, instance = service)
     if form.is_valid():
         form.save()
         return redirect('list_services')
@@ -158,11 +160,13 @@ def update_service(request,service_id):
 def delete_event(request, event_id):
     event = Event.objects.get(pk = event_id)
     event.delete()
+    messages.success(request,("Event deleted!"))
     return HttpResponseRedirect('/list_events')
-
+    
 def delete_service(request, service_id):
     service = Service.objects.get(pk = service_id)
     service.delete()
+    messages.success(request,("Service deleted!"))
     return HttpResponseRedirect('/list_services')
 
 
@@ -182,10 +186,31 @@ def add_event(request):
             submitted = True
     return render(request, 'add_event.html', {'form':form, 'submitted':submitted})
 
+def my_events(request):
+    if request.user.is_authenticated:
+        me = request.user.id
+        events = Event.objects.filter(owner = me)
+        return render(request, 'my_events.html', {'me':me, 'events':events})
+    else:
+        messages.success(request, ("You are not logged in"))
+        return redirect('login')
+
+def my_services(request):
+    if request.user.is_authenticated:
+        me = request.user.id
+        services = Service.objects.filter(owner = me)
+        return render(request, 'my_services.html', {'me':me, 'services':services})
+    else:
+        messages.success(request, ("You are not logged in"))
+        return redirect('login')
+
+
+
 
 def show_event(request, event_id):
     event = Event.objects.get(pk = event_id)
-    return render(request, 'show_event.html', {'event': event })
+    event_owner = User.objects.get(pk = event.owner)
+    return render(request, 'show_event.html', {'event': event, 'event_owner': event_owner })
 
 def list_events(request):
     event_list = Event.objects.all()
@@ -194,7 +219,7 @@ def list_events(request):
 def search_results(request):
     if request.method == "POST":
         searched = request.POST['searched']
-        result = Service.objects.filter(description__contains=searched)
+        result = Service.objects.filter(Q(description__contains=searched)| Q(name__contains=searched) | Q(venue__contains=searched) )
         return render(request, 'search_results.html', {'searched':searched, 'result':result })
     else:
         return render(request, 'search_results.html', {})
@@ -202,7 +227,7 @@ def search_results(request):
 def search_result_events(request):
     if request.method == "POST":
         looked = request.POST['looked']
-        outcome = Event.objects.filter(description__contains=looked)
+        outcome = Event.objects.filter(Q(description__contains=looked)| Q(name__contains=looked) | Q(venue__contains=looked) )
         return render(request, 'search_result_events.html', {'looked':looked, 'outcome':outcome })
     else:
         return render(request, 'search_result_events.html', {})
@@ -212,7 +237,7 @@ def search_result_events(request):
 def add_service(request):
     submitted = False
     if request.method == "POST":
-        form = ServiceForm(request.POST)
+        form = ServiceForm(request.POST, request.FILES)
         if form.is_valid():
             service = form.save(commit=False)
             service.owner = request.user.id

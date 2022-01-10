@@ -22,6 +22,11 @@
         <p class="card-text">
 
           <ul>
+
+            {% if results.service_picture %}
+            <img src="{{results.service_picture.url}}" width="300">
+            {% endif %}
+        
             
               <li>Date:           {{results.date}}</li>
               <li>Time:           {{results.time}}</li>

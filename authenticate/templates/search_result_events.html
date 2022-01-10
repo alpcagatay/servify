@@ -20,9 +20,17 @@
       <div class="card-body">
         <h5 class="card-title">{{outcomes.venue}}</h5>
         <p class="card-text">
+          <br>
+          {% if event.event_picture %}
+    <img src="{{event.event_picture.url}}" width = 300>
+    {% endif %}
 
           <ul>
       
+            {% if outcomes.event_picture %}
+            <img src="{{outcomes.event_picture.url}}">
+            {% endif %}  
+            
               <li>Date:           {{outcomes.date}}</li>
               <li>Time:           {{outcomes.time}}</li>
               <li>Description:    {{outcomes.description}}</li>
