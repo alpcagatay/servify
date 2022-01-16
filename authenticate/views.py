@@ -7,12 +7,14 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, Password
 from .forms import EditProfileForm, EventForm, ServiceForm, SignUpForm
 from urllib.parse import urlencode
 from urllib.parse import urlparse, parse_qsl
-from .models import Event, MyClubUser, Service
+from .models import Event, Service
 from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.contrib import messages
-from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 # Create your views here.
 def home(request):
@@ -56,6 +58,7 @@ def register_user(request):
     context = {'form':form}
     return render(request, 'register.html',context)
 
+@login_required
 def edit_profile(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST, instance=request.user)
@@ -71,6 +74,7 @@ def edit_profile(request):
     context = {'form':form}
     return render(request, 'edit_profile.html',context)
 
+@login_required
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(date=request.POST, user=request.user)
@@ -86,33 +90,42 @@ def change_password(request):
     context = {'form':form}
     return render(request, 'change_password.html',context)
 
+@login_required
 def event_detail(request):
     return render(request, 'event_detail.html')
 
+@login_required
 def service_detail(request):
     return render(request, 'service_detail.html')
 
+@login_required
 def search_result_events(request):
     return render(request, 'search_result_events.html')
 
+@login_required
 def search_result_services(request):
     return render(request, 'search_result_services.html')
 
+@login_required
 def user_profile(request):
     return render(request, 'user_profile.html')
 
+@login_required
 def service_creation(request):
     return render(request, 'service_creation.html')
 
+@login_required
 def event_creation(request):
     return render(request, 'event_creation.html')
 
 
 
+@login_required
 def all_services(request):
     service_list = Service.objects.all()
     return render(request, 'list_services.html', {'service_list': service_list })
 
+@login_required
 def all_events(request):
     event_list = Event.objects.all()
     return render(request, 'list_events.html', {'event_list': event_list })
@@ -141,6 +154,7 @@ def all_events(request):
 #             submitted = True
 #     return render(request, 'add_venue.html', {'form':form, 'submitted':submitted})
 
+@login_required
 def update_event(request,event_id):
     event = Event.objects.get(pk = event_id)
     form = EventForm(request.POST or None,request.FILES,instance = event)
@@ -149,6 +163,7 @@ def update_event(request,event_id):
         return redirect('list_events')
     return render(request, 'update_event.html', {'event':event, 'form': form})
 
+@login_required
 def update_service(request,service_id):
     service = Service.objects.get(pk = service_id)
     form = ServiceForm(request.POST or None,request.FILES, instance = service)
@@ -157,12 +172,14 @@ def update_service(request,service_id):
         return redirect('list_services')
     return render(request, 'update_service.html', {'service':service, 'form': form})
 
+@login_required
 def delete_event(request, event_id):
     event = Event.objects.get(pk = event_id)
     event.delete()
     messages.success(request,("Event deleted!"))
     return HttpResponseRedirect('/list_events')
     
+@login_required
 def delete_service(request, service_id):
     service = Service.objects.get(pk = service_id)
     service.delete()
@@ -171,13 +188,14 @@ def delete_service(request, service_id):
 
 
 
+@login_required
 def add_event(request):
     submitted = False
     if request.method == "POST":
         form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             event = form.save(commit=False)
-            event.owner = request.user.id
+            event.provider = request.user
             event.save()
             return HttpResponseRedirect('/add_event?submitted=True')
     else: 
@@ -186,20 +204,19 @@ def add_event(request):
             submitted = True
     return render(request, 'add_event.html', {'form':form, 'submitted':submitted})
 
+@login_required
 def my_events(request):
     if request.user.is_authenticated:
-        me = request.user.id
-        events = Event.objects.filter(owner = me)
-        return render(request, 'my_events.html', {'me':me, 'events':events})
+        events = Event.objects.filter(provider = request.user)
+        return render(request, 'my_events.html', {'events':events})
     else:
         messages.success(request, ("You are not logged in"))
         return redirect('login')
 
 def my_services(request):
     if request.user.is_authenticated:
-        me = request.user.id
-        services = Service.objects.filter(owner = me)
-        return render(request, 'my_services.html', {'me':me, 'services':services})
+        services = Service.objects.filter(provider = request.user)
+        return render(request, 'my_services.html', {'services':services})
     else:
         messages.success(request, ("You are not logged in"))
         return redirect('login')
@@ -207,15 +224,17 @@ def my_services(request):
 
 
 
+@login_required
 def show_event(request, event_id):
     event = Event.objects.get(pk = event_id)
-    event_owner = User.objects.get(pk = event.owner)
-    return render(request, 'show_event.html', {'event': event, 'event_owner': event_owner })
+    return render(request, 'show_event.html', {'event': event, 'event_provider': event.provider })
 
+@login_required
 def list_events(request):
     event_list = Event.objects.all()
     return render(request, 'list_events.html', {'event_list': event_list })
 
+@login_required
 def search_results(request):
     if request.method == "POST":
         searched = request.POST['searched']
@@ -224,6 +243,7 @@ def search_results(request):
     else:
         return render(request, 'search_results.html', {})
 
+@login_required
 def search_result_events(request):
     if request.method == "POST":
         looked = request.POST['looked']
@@ -234,13 +254,14 @@ def search_result_events(request):
 
 
 
+@login_required
 def add_service(request):
     submitted = False
     if request.method == "POST":
         form = ServiceForm(request.POST, request.FILES)
         if form.is_valid():
             service = form.save(commit=False)
-            service.owner = request.user.id
+            service.provider = request.user
             service.save()
             return HttpResponseRedirect('/add_service?submitted=True')
     else: 
@@ -249,23 +270,87 @@ def add_service(request):
             submitted = True
     return render(request, 'add_service.html', {'form':form, 'submitted':submitted})
 
+@login_required
 def show_service(request, service_id):
+    user = request.user
     service = Service.objects.get(pk = service_id)
-    return render(request, 'show_service.html', {'service': service })
+    is_user_applied = Service.objects.filter(pk = service_id, applied_ones=user).exists()
+    can_user_apply = user.credit >= service.credit
+    assigned_user =  service.attendees.first()
+    return render(request, 'show_service.html', {
+        'service': service, 
+        "is_user_applied": is_user_applied, 
+        "can_user_apply": can_user_apply, 
+        "assigned_user": assigned_user 
+    })
 
+@login_required
 def show_service2(request, service_id2):
     service2 = Service.objects.get(pk = service_id2)
     return render(request, 'show_service2.html', {'service2': service2 })
 
 
+@login_required
 def show_service_search(request, service_id):
     service = Service.objects.get(pk = service_id)
     return render(request, 'show_service.html', {'service': service })
 
 
+@login_required
 def list_services(request):
     service_list = Service.objects.all()
     return render(request, 'list_services.html', {'service_list': service_list })
+
+@login_required
+def apply_service(request, service_id):
+    user = request.user
+    service = Service.objects.get(pk = service_id)
+    service.applied_ones.add(user)
+    service.save()
+    user.credit = user.credit - service.credit
+    user.onholdcredit = user.onholdcredit + service.credit
+    user.save()
+    messages.success(request, ("Successfully applied"))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def cancel_service(request, service_id):
+    user = request.user
+    service = Service.objects.get(pk = service_id)
+    service.applied_ones.remove(request.user)
+    service.save()
+    user.credit = user.credit + service.credit
+    user.onholdcredit = user.onholdcredit - service.credit
+    user.save()
+    messages.success(request, ("Successfully cancelled"))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+ 
+
+@login_required
+def confirm_applied(request, service_id, user_id):
+    applied_user = User.objects.get(id=user_id)
+    service = Service.objects.get(pk = service_id)
+    service.applied_ones.remove(applied_user)
+    service.attendees.add(applied_user)
+    service.provider.credit = service.provider.credit + service.credit
+    service.provider.save()
+
+    applied_user.onholdcredit = applied_user.onholdcredit - service.credit
+    applied_user.save()
+
+    for other_user in service.applied_ones.all():
+        service.others.add(other_user)
+        other_user.credit = other_user.credit + service.credit
+        other_user.onholdcredit = other_user.onholdcredit - service.credit
+        other_user.save()
+
+    service.save()
+    messages.success(request, ("Successfully applied"))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+
 
 
 def mapindex(address_or_postalcode, data_type = 'json'):

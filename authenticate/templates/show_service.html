@@ -25,14 +25,68 @@
     <p>Venue: <strong>{{service.venue}}</strong></p>
     <p>Provided by: <strong>{{service.provider}}</strong></p>
     <p>Credit: <strong>{{service.credit}}</strong></p>
-    <p>Attendees:      </p>
-                {% for user in service.attendees.all %}
-                <strong>{{user}}</strong>
-                <br>
-                {% endfor %}
-                <a href="{% url 'update_service' service.id %}" class= "btn btn-outline-secondary btn-sm">Update Service</a>
-                <a href="{% url 'delete_service' service.id %}" class= "btn btn-outline-danger btn-sm">Delete Service</a>
-    <br>
+    
+    {% if user == service.provider  %}
+      <div>
+        <p>
+          {% if not assigned_user %}
+            Applied users:</p>
+              {% for user in service.applied_ones.all %}
+                <div style="display: flex; padding: 2px; padding-left: 10px;">
+                  <strong>{{user}}</strong><br/>
+                  <a href="{% url 'confirm_applied' service.id user.id %}" style="margin-left: 5px;" class= "btn btn-outline-danger btn-sm">Confirm</a>
+                </div>
+              {% endfor %}
+          {% else %}
+            <div>
+              <span>
+                Assinged user: {{ assigned_user }}
+              </span>
+            </div>
+          {% endif %}
+        </p>
+      </div>
+
+      {% if not assigned_user %}
+        <div>
+          <a href="{% url 'update_service' service.id %}" class= "btn btn-outline-secondary btn-sm">Update Service</a>
+          <a href="{% url 'delete_service' service.id %}" class= "btn btn-outline-danger btn-sm">Delete Service</a>
+        </div>
+      {% endif %}
+
+    {% else %}
+      {% if not assigned_user %}
+
+
+      {% if is_user_applied %}
+        <div>
+          <a href="{% url 'cancel_service' service.id %}" class= "btn btn-outline-secondary btn-sm">Cancel</a>
+        </div>
+      {% else %}
+        {% if can_user_apply %}
+          <div>
+            <a href="{% url 'apply_service' service.id %}"  class= "btn btn-outline-secondary btn-sm">Apply</a>
+          </div>
+        {% else %}
+          <span>
+            yetersiz kredi
+          </span>
+        {% endif %}
+      {% endif %}
+
+        
+      {% else %}
+          {% if user == assigned_user %}
+          <span>Assined to you</span>
+          {% else %}
+          <span>Assinged to another user</span>
+          {% endif %}
+      {% endif %}
+
+    {% endif %}
+
+
+
     <!-- {% if service.service_picture %}
     {{service.service_image}}
     {% endif %}

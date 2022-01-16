@@ -6,7 +6,7 @@
 
 <h2 class="text-center">My Services</h2>
 <br>
-{{user.myclubuser.bio}}
+{{user.bio}}
 <ul>
 {% for service in services %}
 <li><a href="{% url 'show_service' service.id %}">     {{ service }}</a> at {{service.venue}} | {{service.time}} </li>

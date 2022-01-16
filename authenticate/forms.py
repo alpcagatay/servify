@@ -1,16 +1,20 @@
 from django.contrib.auth import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.contrib.auth.models import User 
+# from django.contrib.auth.models import User 
 from django import forms
 from django.db.models.base import Model
 from django.forms import fields, ModelForm, widgets
-from .models import MyClubUser, Service, Event, Final_Event_Status, Final_Service_Status
+from .models import Service, Event, Final_Event_Status, Final_Service_Status
+
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class EditProfileForm(UserChangeForm):
     password = forms.CharField(label = "" ,widget = forms.TextInput(attrs={'type':'hidden'}))
     class Meta:
         model = User
-        fields = ('username','first_name','last_name','email','password',)
+        fields = ('username','first_name','last_name','email','password', "bio", "profile_picture")
 
 
 class SignUpForm(UserCreationForm):
@@ -46,7 +50,7 @@ class SignUpForm(UserCreationForm):
 class ServiceForm(ModelForm):
     class Meta:
         model = Service
-        fields =  ('name','date','time','description','venue','credit','provider', 'service_picture')
+        fields =  ('name','date','time','description','venue','credit', 'service_picture')
         labels = {
             'name':'',
             'date':'',
@@ -54,7 +58,6 @@ class ServiceForm(ModelForm):
             'description':'',
             'venue':'',
             'credit':'',
-            'provider':'',
             'service_picture':''
         }
         widgets= {
@@ -64,7 +67,6 @@ class ServiceForm(ModelForm):
             'description': forms.Textarea(attrs={'class':'form-control','placeholder':'Description'}),
             'venue': forms.TextInput(attrs={'class':'form-control','placeholder':'Venue'}),
             'credit':forms.TextInput(attrs={'placeholder': 'Total Credit'}),
-            'provider': widgets.Select(attrs={'class':'form-control','placeholder':'Provider'}),
               }
 
 
@@ -74,7 +76,7 @@ class EventForm(ModelForm):
     class Meta:
 
         model = Event
-        fields =  ('name','date','time','description','venue','provider','event_picture')
+        fields =  ('name','date','time','description','venue','event_picture')
         labels = {
             'name':'',
             'date':'',
@@ -82,7 +84,6 @@ class EventForm(ModelForm):
             'description':'',
             'venue':'',
             'credit':'',
-            'provider':'',
             'event_picture':''
         }
         widgets= {
@@ -91,6 +92,4 @@ class EventForm(ModelForm):
             'time': forms.TimeInput(attrs={'type':'time'}),
             'description': forms.Textarea(attrs={'class':'form-control','placeholder':'Description'}),
             'venue': forms.TextInput(attrs={'class':'form-control','placeholder':'Venue'}),
-            'provider': widgets.Select(attrs={'class':'form-control','placeholder':'Provider'}),
-
        }

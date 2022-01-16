@@ -8,8 +8,8 @@
 <br>
 <h2>Hello {{user}}</h2>
 
-{% if user.myclubuser.profile_picture %}
-<img src="{{user.myclubuser.profile_picture.url}}" width = 300 class="rounded-circle">
+{% if user.profile_picture %}
+<img src="{{user.profile_picture.url}}" width = 300 class="rounded-circle">
 
 
 {% else %}
@@ -26,7 +26,7 @@
   Last name: <strong>{{user.last_name}}</strong>
 </p>
 <br>
-  Bio: <strong>{{user.myclubuser.bio}}</strong>
+  Bio: <strong>{{user.bio}}</strong>
   <br>
 <br>
   Available credits: <strong>{{user.credit}}</strong>
