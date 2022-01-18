@@ -122,7 +122,7 @@ def event_creation(request):
 
 @login_required
 def all_services(request):
-    service_list = Service.objects.all()
+    service_list = Service.objects.filter()
     return render(request, 'list_services.html', {'service_list': service_list })
 
 @login_required
@@ -231,7 +231,7 @@ def show_event(request, event_id):
 
 @login_required
 def list_events(request):
-    event_list = Event.objects.all()
+    event_list = Event.objects.filter(capacity__gte=1)
     return render(request, 'list_events.html', {'event_list': event_list })
 
 @login_required
@@ -284,6 +284,21 @@ def show_service(request, service_id):
         "assigned_user": assigned_user 
     })
 
+
+@login_required
+def show_event(request, event_id):
+    user = request.user
+    event = Event.objects.get(pk = event_id)
+    is_user_applied = Event.objects.filter(pk = event_id, applied_ones=user).exists()
+    can_user_apply = event.capacity >= 1
+    assigned_user =  event.attendees.first()
+    return render(request, 'show_event.html', {
+        'event': event, 
+        "is_user_applied": is_user_applied, 
+        "can_user_apply": can_user_apply, 
+        "assigned_user": assigned_user 
+    })
+
 @login_required
 def show_service2(request, service_id2):
     service2 = Service.objects.get(pk = service_id2)
@@ -298,7 +313,7 @@ def show_service_search(request, service_id):
 
 @login_required
 def list_services(request):
-    service_list = Service.objects.all()
+    service_list = Service.objects.filter(status = 1)
     return render(request, 'list_services.html', {'service_list': service_list })
 
 @login_required
@@ -312,6 +327,19 @@ def apply_service(request, service_id):
     user.save()
     messages.success(request, ("Successfully applied"))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+
+@login_required
+def apply_event(request, event_id):
+    user = request.user
+    event = Event.objects.get(pk = event_id)
+    event.applied_ones.add(user)
+    event.save()
+   
+    messages.success(request, ("Successfully applied"))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 
 @login_required
@@ -328,6 +356,17 @@ def cancel_service(request, service_id):
  
 
 @login_required
+def cancel_event(request, event_id):
+    user = request.user
+    event = Event.objects.get(pk = event_id)
+    event.applied_ones.remove(request.user)
+    event.save()
+    user.save()
+    messages.success(request, ("Successfully cancelled"))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+ 
+
+@login_required
 def confirm_applied(request, service_id, user_id):
     applied_user = User.objects.get(id=user_id)
     service = Service.objects.get(pk = service_id)
@@ -335,6 +374,8 @@ def confirm_applied(request, service_id, user_id):
     service.attendees.add(applied_user)
     service.provider.credit = service.provider.credit + service.credit
     service.provider.save()
+    service.status = 3
+    
 
     applied_user.onholdcredit = applied_user.onholdcredit - service.credit
     applied_user.save()
@@ -348,6 +389,26 @@ def confirm_applied(request, service_id, user_id):
     service.save()
     messages.success(request, ("Successfully applied"))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+
+@login_required
+def confirm_applied_event(request, event_id, user_id):
+    applied_user = User.objects.get(id=user_id)
+    event = Event.objects.get(pk = event_id)
+    event.applied_ones.remove(applied_user)
+    event.attendees.add(applied_user)
+    applied_user.save()
+    event.capacity = event.capacity - 1
+
+    for other_user in event.applied_ones.all():
+        event.others.add(other_user)
+        other_user.save()
+
+    event.save()
+    messages.success(request, ("Successfully applied"))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 
 

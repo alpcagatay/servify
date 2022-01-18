@@ -34,15 +34,63 @@
                 <br>
                 {% endfor %}
     
-    <br>
-    <br>
-
-                <a href="{% url 'update_event' event.id %}" class= "btn btn-outline-secondary btn-sm">Update event</a>
-                <a href="{% url 'delete_event' event.id %}" class= "btn btn-outline-danger btn-sm">Delete event</a>
-    
-    <br>
- 
-    <!-- {% if event.event_picture %}
-    {{event.event_image}}
-    {% endif %}
-  {% endblock %} -->
+                {% if user == event.provider  %}
+                <div>
+                  <p>
+                    {% if not assigned_user %}
+                      Applied users:</p>
+                        {% for user in event.applied_ones.all %}
+                          <div style="display: flex; padding: 2px; padding-left: 10px;">
+                            <strong>{{user}}</strong><br/>
+                            <a href="{% url 'confirm_applied_event' event.id user.id %}" style="margin-left: 5px;" class= "btn btn-outline-danger btn-sm">Confirm</a>
+                          </div>
+                        {% endfor %}
+                    {% else %}
+                      <div>
+                        <span>
+                          Assinged user: {{ assigned_user }}
+                        </span>
+                      </div>
+                    {% endif %}
+                  </p>
+                </div>
+          
+                {% if not assigned_user %}
+                  <div>
+                    <a href="{% url 'update_event' event.id %}" class= "btn btn-outline-secondary btn-sm">Update event</a>
+                    <a href="{% url 'delete_event' event.id %}" class= "btn btn-outline-danger btn-sm">Delete event</a>
+                  </div>
+                {% endif %}
+          
+              {% else %}
+                {% if not assigned_user %}
+          
+          
+                {% if is_user_applied %}
+                  <div>
+                    <a href="{% url 'cancel_event' event.id %}" class= "btn btn-outline-secondary btn-sm">Cancel</a>
+                  </div>
+                {% else %}
+                  {% if can_user_apply %}
+                    <div>
+                      <a href="{% url 'apply_event' event.id %}"  class= "btn btn-outline-secondary btn-sm">Apply</a>
+                    </div>
+                  {% else %}
+                    <span>
+                      yetersiz kredi
+                    </span>
+                  {% endif %}
+                {% endif %}
+          
+                  
+                {% else %}
+                    {% if user == assigned_user %}
+                    <span>Assined to you</span>
+                    {% else %}
+                    <span>Assinged to another user</span>
+                    {% endif %}
+                {% endif %}
+          
+              {% endif %}
+              {% endblock %}
+          

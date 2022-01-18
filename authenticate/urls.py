@@ -34,6 +34,9 @@ urlpatterns = [
     path('apply_service/<service_id>', views.apply_service, name="apply_service"),
     path('cancel_service/<service_id>', views.cancel_service, name="cancel_service"),
     path('confirm_applied/<service_id>/<user_id>', views.confirm_applied, name="confirm_applied"),
+    path('apply_event/<event_id>', views.apply_event, name="apply_event"),
+    path('cancel_event/<event_id>', views.cancel_event, name="cancel_event"),
+    path('confirm_applied_event/<event_id>/<user_id>', views.confirm_applied_event, name="confirm_applied_event"),
 
 
 ]

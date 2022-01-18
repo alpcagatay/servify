@@ -140,6 +140,7 @@ class Event(models.Model):
     attendees = models.ManyToManyField("authenticate.User",default="", blank=True, related_name='event_attendees')
     others = models.ManyToManyField("authenticate.User", default="", blank=True, related_name='event_others')
     event_picture = models.ImageField(null=True, blank=True, upload_to = "images/")
+    capacity = models.PositiveIntegerField(default=10)
 
 
     ChoicesForService = ((1,'Open'),(2,'Closed'),(3,'Done'))

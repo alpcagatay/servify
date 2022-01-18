@@ -76,7 +76,7 @@ class EventForm(ModelForm):
     class Meta:
 
         model = Event
-        fields =  ('name','date','time','description','venue','event_picture')
+        fields =  ('name','date','time','description','venue','event_picture','capacity')
         labels = {
             'name':'',
             'date':'',
@@ -84,7 +84,8 @@ class EventForm(ModelForm):
             'description':'',
             'venue':'',
             'credit':'',
-            'event_picture':''
+            'event_picture':'',
+            'capacity':'Capacity'
         }
         widgets= {
             'name': forms.TextInput(attrs={'class':'form-control','placeholder':'Event Name'}),
