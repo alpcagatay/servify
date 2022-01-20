@@ -14,18 +14,21 @@ class EditProfileForm(UserChangeForm):
     password = forms.CharField(label = "" ,widget = forms.TextInput(attrs={'type':'hidden'}))
     class Meta:
         model = User
-        fields = ('username','first_name','last_name','email','password', "bio", "profile_picture")
+        fields = ('username','first_name','last_name','email','password', "bio")
 
 
 class SignUpForm(UserCreationForm):
-    username = forms.CharField(label = "" ,max_length=100,widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Last Name'}))
+    username = forms.CharField(label = "" ,max_length=150, widget = forms.TextInput(attrs={'class':'form-control','placeholder':'username'}))
     email = forms.EmailField(label = "" ,widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Email Address'}))
     first_name = forms.CharField(help_text = "Enter Your First Name Here", label = "" ,max_length=100, widget = forms.TextInput(attrs={'class':'form-control','placeholder':'First Name'}))
     last_name = forms.CharField(label = "" ,max_length=100,widget = forms.TextInput(attrs={'class':'form-control','placeholder':'Last Name'}))
+    bio = forms.CharField(label = "" ,max_length=1000,widget = forms.TextInput(attrs={'class':'form-control','placeholder':'bio'}))
+
+    profile_picture = forms.ImageField()
 
     class Meta:
         model = User
-        fields = ('username','first_name','last_name','email','password1','password2')
+        fields = ('username','first_name','last_name','email','password1','password2','bio','profile_picture')
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args,**kwargs)
@@ -45,6 +48,18 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].widget.attrs['class']= 'form-control'
         self.fields['password2'].widget.attrs['placeholder']= 'Confirm Password'
         self.fields['password2'].label = ''
+
+        self.fields['profile_picture'].widget.attrs['class']= ''
+        self.fields['profile_picture'].widget.attrs['placeholder']= ''
+        self.fields['profile_picture'].label = ''
+        self.fields['profile_picture'].help_text = ''
+
+        self.fields['bio'].widget.attrs['class']= 'form-control'
+        self.fields['bio'].widget.attrs['placeholder']= 'bio'
+        self.fields['bio'].label = ''
+        self.fields['bio'].help_text = 'Please tell us about yourself.'
+
+
 
 
 class ServiceForm(ModelForm):

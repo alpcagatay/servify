@@ -27,6 +27,7 @@
     <p>Description: <strong>{{event.description}}</strong></p>
     <p>Venue: <strong>{{event.venue}}</strong></p>
     <p>Provided by: <strong>{{event_provider}}</strong></p>
+    <a href="{% url 'show_profile_page' event.provider.id %}"><strong>Provider's Page</strong></p></a>
     <p>Credit: <strong>{{event.credit}}</strong></p>
     <p>Attendees:      </p>
                 {% for user in event.attendees.all %}

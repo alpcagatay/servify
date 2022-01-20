@@ -1,3 +1,4 @@
+from inspect import ArgSpec
 from django.http import request
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -12,6 +13,8 @@ from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.generic import DetailView
+from django.shortcuts import get_object_or_404
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -42,7 +45,7 @@ def logout_user(request):
 
 def register_user(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = SignUpForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             username = form.cleaned_data['username']
@@ -61,7 +64,7 @@ def register_user(request):
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
-        form = EditProfileForm(request.POST, instance=request.user)
+        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
            
@@ -440,3 +443,15 @@ def mapindex(address_or_postalcode, data_type = 'json'):
     return render(url, 'mapindex.html')
 
 
+class ShowProfilePageView(DetailView):
+    model = User
+    template_name = 'general_profile.html'
+
+    def get_context_data(self, *args, **kwargs):
+        users = User.objects.all()
+        context = super(ShowProfilePageView, self).get_context_data(*args, **kwargs)
+
+        page_user = get_object_or_404(User, id=self.kwargs['pk'])
+
+        context["page_user"] = page_user
+        return context

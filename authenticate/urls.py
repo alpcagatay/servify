@@ -37,6 +37,7 @@ urlpatterns = [
     path('apply_event/<event_id>', views.apply_event, name="apply_event"),
     path('cancel_event/<event_id>', views.cancel_event, name="cancel_event"),
     path('confirm_applied_event/<event_id>/<user_id>', views.confirm_applied_event, name="confirm_applied_event"),
+    path('<int:pk>/profile/', views.ShowProfilePageView.as_view(), name="show_profile_page"),
 
 
 ]

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<h1 class="text-center">User Profile</h1>
+<br>
+
+{% if user.profile_picture %}
+<img src="{{user.profile_picture.url}}" width = 250 class="rounded">
+<br>
+<br>
+
+{% else %}
+<img src="" width = 300 class="rounded-circle">
+<br>
+<br>
+<br>
+{% endif %}
+
+Username: <strong>{{page_user.username}}</strong>
+<br>
+First name: <strong>{{page_user.first_name}}</strong>
+<br>
+Last name: <strong>{{page_user.last_name}}</strong>
+</p>
+<br>
+Bio: <strong>{{page_user.bio}}</strong>
+<br>
+
+
+
+
+
+
+  {% endblock %}

@@ -35,7 +35,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(
         verbose_name="Username",
-        max_length=30,
+        max_length=150,
         blank=False,
         null=False,
         unique=True,

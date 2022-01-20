@@ -24,6 +24,7 @@
     <p>Description: <strong>{{service.description}}</strong></p>
     <p>Venue: <strong>{{service.venue}}</strong></p>
     <p>Provided by: <strong>{{service.provider}}</strong></p>
+    <a href="{% url 'show_profile_page' service.provider.id %}"><strong>Provider's Page</strong></p></a>
     <p>Credit: <strong>{{service.credit}}</strong></p>
     
     {% if user == service.provider  %}
