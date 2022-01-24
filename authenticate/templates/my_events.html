@@ -9,17 +9,43 @@
 
 <ul>
 {% for event in events %}
-
-
-<li><a href="{% url 'show_event' event.id %}">     {{ event }}</a> at {{event.venue}} | {{event.time}} </li>
-{% if event.event_picture %}
+<div class="card">
+  <div class="card-header">
+      <a href="{% url 'show_event' event.id %}">     {{ event }}</a>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Venue: {{event.venue}}</h5>
+    <br>
+    {% if event.event_picture %}
 <img src="{{event.event_picture.url}}" width = 300>
 {% endif %}
-    <br>
-   
+
+    <p class="card-text">
+
+      <ul>
+          
+          <li>on <strong>{{event.date}}</strong> at <strong>{{event.time}}</strong></li>
+          <li>Remaining Capacity: {{event.capacity}}</li> 
+
+          <li>Provided by:    </strong><a href="{% url 'show_profile_page' event.provider.id %}">{{event.provider}}</a></strong> <img src={{event.provider.profile_picture.url}} class="rounded-circle" width = 25 height= auto></li>
+          
+      </ul>
+
+    </p>
+  </div>
+  {% if user.is_authenticated %}
+  {% if user == event.provider %}
+  <div class="card-footer text-muted">
+      <a href="{% url 'update_event' event.id %}" class= "btn btn-outline-secondary btn-sm">Update event</a>
+      <a href="{% url 'delete_event' event.id %}" class= "btn btn-outline-danger btn-sm">Delete event</a>
+    </div>
+      {% endif %}
+      {% endif %}
+  
+</div>
 
 
-
+<br>
 {% endfor %}
 </ul>
 

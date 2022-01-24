@@ -26,9 +26,10 @@
     <p>Time: <strong>{{event.time}}</strong></p>
     <p>Description: <strong>{{event.description}}</strong></p>
     <p>Venue: <strong>{{event.venue}}</strong></p>
-    <p>Provided by: <strong>{{event_provider}}</strong></p>
-    <a href="{% url 'show_profile_page' event.provider.id %}"><strong>Provider's Page</strong></p></a>
-    <p>Credit: <strong>{{event.credit}}</strong></p>
+    <p>Capacity: <strong>{{event.capacity}}</strong></p>
+    
+    <p>Provided by: <a href="{% url 'show_profile_page' event.provider.id %}"><strong>{{event.provider}}</strong>  <img src={{event.provider.profile_picture.url}} class="rounded-circle" width = 25 height= auto></p></a> 
+
     <p>Attendees:      </p>
                 {% for user in event.attendees.all %}
                 <strong>{{user}}</strong>

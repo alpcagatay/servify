@@ -15,8 +15,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView
 from django.shortcuts import get_object_or_404
-
 from django.contrib.auth import get_user_model
+
+
 User = get_user_model()
 
 # Create your views here.
@@ -409,7 +410,7 @@ def confirm_applied_event(request, event_id, user_id):
         other_user.save()
 
     event.save()
-    messages.success(request, ("Successfully applied"))
+    messages.success(request, ("Successfully added the user to event attendees"))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
