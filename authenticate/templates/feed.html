@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+    <h1 class="text-center">Activity Feed</h1>
+    <ul>
+{% for feed in feed_list %}
+    
+        
+    {% if feed.feed_status == 1 %}
+    
+<li><a href="{% url 'show_profile_page' feed.feed_user.id %}">{{feed.feed_user}}</a> registered at {{feed.feed_date}}</li>   
+
+    
+    {% elif feed.feed_status == 2 %}
+
+<li><a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> logged in at {{feed.feed_date}}</li>   
+    
+{% elif feed.feed_status == 3 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> followed <a href="{% url 'show_profile_page' feed.feed_user2.id %}"> {{feed.feed_user2}}</a></li> 
+
+{% elif feed.feed_status == 4 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> unfollowed <a href="{% url 'show_profile_page' feed.feed_user2.id %}"> {{feed.feed_user2}}</a></li> 
+
+
+{% elif feed.feed_status == 5 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> created <a href="{% url 'show_event' feed.feed_event.id %}"> {{feed.feed_event.name}}</a> event at {{feed.feed_date}}</li> 
+
+{% elif feed.feed_status == 6 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> created <a href="{% url 'show_service' feed.feed_service.id %}"> {{feed.feed_service.name}}</a> service at {{feed.feed_date}}</li> 
+
+
+{% elif feed.feed_status == 10 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> updated <a href="{% url 'show_event' feed.feed_event.id %}"> {{feed.feed_event.name}}</a> event at {{feed.feed_date}}</li> 
+
+{% elif feed.feed_status == 11 %}
+
+<li><a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> deleted an event at {{feed.feed_date}}</li> 
+
+{% elif feed.feed_status == 12 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> edited profile {{feed.feed_date}}</li> 
+
+{% elif feed.feed_status == 13 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> updated <a href="{% url 'show_service' feed.feed_service.id %}"> {{feed.feed_service.name}}</a> service at {{feed.feed_date}} </li> 
+
+{% elif feed.feed_status == 14 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> deleted a service at {{feed.feed_date}} </li> 
+
+{% elif feed.feed_status == 7 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> applied to <a href="{% url 'show_service' feed.feed_service.id %}"> {{feed.feed_service.name}}</a> at {{feed.feed_date}} </li> 
+
+{% elif feed.feed_status == 8 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> applied to {{feed.feed_event.name}} at {{feed.feed_date}} </li> 
+
+{% elif feed.feed_status == 15 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> cancelled application to {{feed.feed_service.name}} at {{feed.feed_date}} </li> 
+
+
+{% elif feed.feed_status == 16 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> cancelled application to {{feed.feed_event.name}} at {{feed.feed_date}} </li> 
+
+{% elif feed.feed_status == 9 %}
+
+<li><a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> approved <a href="{% url 'show_profile_page' feed.feed_user2.id %}"> {{feed.feed_user2}}</a>'s application to {{feed.feed_service.name}} </li> 
+
+{% elif feed.feed_status == 17 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> approved <a href="{% url 'show_profile_page' feed.feed_user2.id %}"> {{feed.feed_user2}}</a>'s application to {{feed.feed_service.name}} </li> 
+
+
+
+    {% endif %}
+
+</ul>
+{% endfor %}
+    </ul>
+{% endblock %}

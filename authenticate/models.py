@@ -95,8 +95,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=0, 
         validators = [MaxValueValidator(15), MinValueValidator(0)]
     )
-
-
+    followers = models.ManyToManyField("authenticate.User", 
+        blank=True, 
+        related_name='followers_users'
+        
+    )
+    numberoffollowers = models.PositiveBigIntegerField(
+        verbose_name="numberoffollowers",
+        default=0,
+    )
+   
     objects = UserManager()
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
@@ -104,6 +112,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_full_name(self):
         return " ".join([self.first_name, self.last_name])
 
+
+# class followers(models.Model):
+#     followers = models.ManyToManyField("authenticate.User", blank=True, related_name='followers')
+#     numberoffollowers = models.PositiveIntegerField(default = 0)
 
 class Service(models.Model):
     name = models.CharField('Service Name', max_length=120)
@@ -153,12 +165,11 @@ class Event(models.Model):
 class Final_Event_Status(models.Model):
     user_final_status = models.ManyToManyField(User, default="", related_name='event_user_status')
     event_final_status = models.ManyToManyField(Service, default="", related_name='event_final_status')
-
     choices = ((1,'Applied'), (2,'Accepted'),(3,'Completed'), (4,'Not Completed'),(5,'Rejected'))
     user_final_status = models.PositiveIntegerField(choices=choices)
 
 
-# Create your models here.
+# # Create your models here.
 
 class Final_Service_Status(models.Model):
     user_final_status = models.ManyToManyField(User, default="", blank=True, related_name='service_user_status')
@@ -175,3 +186,13 @@ class Measurement(models.Model):
 
     def __str__(self):
         return f"Distance from {self.location} to {self.destination} is {self.distance} km"
+
+
+class Feed(models.Model):
+    feed_user = models.ForeignKey("authenticate.User",default = "", null=True, blank=True, on_delete=models.CASCADE, related_name='feed_user')
+    feed_user2 = models.ForeignKey("authenticate.User", default = "", null=True, blank=True,on_delete=models.CASCADE, related_name='feed_user2')
+    feed_service = models.ForeignKey(Service, default = "", null=True, blank=True, on_delete=models.CASCADE, related_name='feed_service')
+    feed_event = models.ForeignKey(Event, default = "", null=True, blank=True, on_delete=models.CASCADE, related_name='feed_event')
+    feed_date = models.DateTimeField()
+    choices = ((1, 'registered'),(2,'logged in'),(3,'followed'),(4,'unfollowed'), (5,'created an event'),(6,'created a service'),(7,'applied service'),(8,'applied event'),(9,'confirmed'), (10, 'updated event'),(11,'deleted an event'),(12,('edited profile information')), (13, 'updated service'), (14, 'deleted a service'), (15,'canceled application'), (16,('cancelled application to an event')),(17,('confirmed event')))
+    feed_status = models.PositiveIntegerField(choices=choices)

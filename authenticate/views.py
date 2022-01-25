@@ -1,3 +1,4 @@
+import datetime
 from inspect import ArgSpec
 from django.http import request
 from django.http.response import HttpResponseRedirect
@@ -8,7 +9,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, Password
 from .forms import EditProfileForm, EventForm, ServiceForm, SignUpForm
 from urllib.parse import urlencode
 from urllib.parse import urlparse, parse_qsl
-from .models import Event, Service
+from .models import Event, Feed, Service
 from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.contrib import messages
@@ -29,9 +30,13 @@ def login_user(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username = username, password=password)
+        
         if user is not None:
             login(request,user)
             messages.success(request,('You have been logged in.'))
+            dateadded = datetime.datetime.now()
+            feedadded = Feed.objects.create(feed_user = request.user, feed_status = 2, feed_date = dateadded)
+            feedadded.save()    
             return redirect('home')
         else:
             messages.success(request,('Ooops! Something went wrong. Please Try Again.'))
@@ -54,6 +59,9 @@ def register_user(request):
             user = authenticate(request, username = username, password=password)
             login(request,user)
             messages.success(request,('You have registered'))
+            dateadded = datetime.datetime.now()
+            feedadded = Feed.objects.create(feed_user = request.user, feed_status = 1, feed_date = dateadded)
+            feedadded.save() 
             return redirect('home')
 
     else:
@@ -68,8 +76,11 @@ def edit_profile(request):
         form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-           
+
             messages.success(request,('You have edited your profile'))
+            dateadded = datetime.datetime.now()
+            feedadded = Feed.objects.create(feed_user = request.user, feed_status = 12, feed_date= dateadded)
+            feedadded.save() 
             return redirect('home')
 
     else:
@@ -164,6 +175,9 @@ def update_event(request,event_id):
     form = EventForm(request.POST or None,request.FILES,instance = event)
     if form.is_valid():
         form.save()
+        dateadded = datetime.datetime.now()
+        feedadded = Feed.objects.create(feed_user = request.user, feed_status = 10,feed_event = event, feed_date = dateadded)
+        feedadded.save()
         return redirect('list_events')
     return render(request, 'update_event.html', {'event':event, 'form': form})
 
@@ -173,12 +187,18 @@ def update_service(request,service_id):
     form = ServiceForm(request.POST or None,request.FILES, instance = service)
     if form.is_valid():
         form.save()
+        dateadded = datetime.datetime.now()
+        feedadded = Feed.objects.create(feed_user = request.user, feed_status = 13,feed_service = service, feed_date = dateadded)
+        feedadded.save()
         return redirect('list_services')
     return render(request, 'update_service.html', {'service':service, 'form': form})
 
 @login_required
 def delete_event(request, event_id):
     event = Event.objects.get(pk = event_id)
+    dateadded = datetime.datetime.now()
+    feedadded = Feed.objects.create(feed_user = request.user, feed_status = 11, feed_date = dateadded)
+    feedadded.save()
     event.delete()
     messages.success(request,("Event deleted!"))
     return HttpResponseRedirect('/list_events')
@@ -186,6 +206,9 @@ def delete_event(request, event_id):
 @login_required
 def delete_service(request, service_id):
     service = Service.objects.get(pk = service_id)
+    dateadded = datetime.datetime.now()
+    feedadded = Feed.objects.create(feed_user = request.user, feed_status = 14, feed_date = dateadded)
+    feedadded.save()
     service.delete()
     messages.success(request,("Service deleted!"))
     return HttpResponseRedirect('/list_services')
@@ -201,6 +224,9 @@ def add_event(request):
             event = form.save(commit=False)
             event.provider = request.user
             event.save()
+            dateadded = datetime.datetime.now()
+            feedadded = Feed.objects.create(feed_user = request.user, feed_status = 5, feed_event = event, feed_date= dateadded)
+            feedadded.save() 
             return HttpResponseRedirect('/add_event?submitted=True')
     else: 
         form = EventForm
@@ -230,8 +256,14 @@ def my_services(request):
 
 @login_required
 def show_event(request, event_id):
-    event = Event.objects.get(pk = event_id)
-    return render(request, 'show_event.html', {'event': event, 'event_provider': event.provider })
+    try:
+        event = Event.objects.get(pk = event_id)
+        return render(request, 'show_event.html', {'event': event, 'event_provider': event.provider })
+    except Event.object.get(pk=event_id).DoesNotExist:
+        
+        render(request, 'list_events.html')
+        messages.success(request, ("The event does not exist anymore"))
+
 
 @login_required
 def list_events(request):
@@ -243,6 +275,7 @@ def search_results(request):
     if request.method == "POST":
         searched = request.POST['searched']
         result = Service.objects.filter(Q(description__contains=searched)| Q(name__contains=searched) | Q(venue__contains=searched) )
+        
         return render(request, 'search_results.html', {'searched':searched, 'result':result })
     else:
         return render(request, 'search_results.html', {})
@@ -267,6 +300,9 @@ def add_service(request):
             service = form.save(commit=False)
             service.provider = request.user
             service.save()
+            dateadded = datetime.datetime.now()
+            feedadded = Feed.objects.create(feed_user = request.user, feed_status = 6, feed_service = service, feed_date= dateadded)
+            feedadded.save() 
             return HttpResponseRedirect('/add_service?submitted=True')
     else: 
         form = ServiceForm
@@ -276,32 +312,40 @@ def add_service(request):
 
 @login_required
 def show_service(request, service_id):
-    user = request.user
-    service = Service.objects.get(pk = service_id)
-    is_user_applied = Service.objects.filter(pk = service_id, applied_ones=user).exists()
-    can_user_apply = user.credit >= service.credit
-    assigned_user =  service.attendees.first()
-    return render(request, 'show_service.html', {
-        'service': service, 
-        "is_user_applied": is_user_applied, 
-        "can_user_apply": can_user_apply, 
-        "assigned_user": assigned_user 
-    })
-
-
+    try:
+        user = request.user
+        service = Service.objects.get(pk = service_id)
+        is_user_applied = Service.objects.filter(pk = service_id, applied_ones=user).exists()
+        can_user_apply = user.credit >= service.credit
+        assigned_user =  service.attendees.first()
+        return render(request, 'show_service.html', {
+            'service': service, 
+            "is_user_applied": is_user_applied, 
+            "can_user_apply": can_user_apply, 
+            "assigned_user": assigned_user 
+        })
+    except Service.objects.get(pk = service_id).DoesNotExist:
+        render(request, 'list_services.html')
+        messages.success(request, ("The service does not exist anymore"))
 @login_required
 def show_event(request, event_id):
-    user = request.user
-    event = Event.objects.get(pk = event_id)
-    is_user_applied = Event.objects.filter(pk = event_id, applied_ones=user).exists()
-    can_user_apply = event.capacity >= 1
-    assigned_user =  event.attendees.first()
-    return render(request, 'show_event.html', {
-        'event': event, 
-        "is_user_applied": is_user_applied, 
-        "can_user_apply": can_user_apply, 
-        "assigned_user": assigned_user 
+    try:
+
+        user = request.user
+        event = Event.objects.get(pk = event_id)
+        is_user_applied = Event.objects.filter(pk = event_id, applied_ones=user).exists()
+        can_user_apply = event.capacity >= 1
+        assigned_user =  event.attendees.first()
+        return render(request, 'show_event.html', {
+            'event': event, 
+            "is_user_applied": is_user_applied, 
+            "can_user_apply": can_user_apply, 
+            "assigned_user": assigned_user 
     })
+    except Event.object.get(pk=event_id).DoesNotExist:
+        
+        render(request, 'list_events.html')
+        messages.success(request, ("The event does not exist anymore"))
 
 @login_required
 def show_service2(request, service_id2):
@@ -329,6 +373,9 @@ def apply_service(request, service_id):
     user.credit = user.credit - service.credit
     user.onholdcredit = user.onholdcredit + service.credit
     user.save()
+    dateadded = datetime.datetime.now()
+    feedadded = Feed.objects.create(feed_user = request.user, feed_status = 7, feed_service = service, feed_date= dateadded)
+    feedadded.save() 
     messages.success(request, ("Successfully applied"))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -340,7 +387,9 @@ def apply_event(request, event_id):
     event = Event.objects.get(pk = event_id)
     event.applied_ones.add(user)
     event.save()
-   
+    dateadded = datetime.datetime.now()
+    feedadded = Feed.objects.create(feed_user = request.user, feed_status = 8, feed_event = event, feed_date= dateadded)
+    feedadded.save() 
     messages.success(request, ("Successfully applied"))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -350,11 +399,15 @@ def apply_event(request, event_id):
 def cancel_service(request, service_id):
     user = request.user
     service = Service.objects.get(pk = service_id)
+    dateadded = datetime.datetime.now()
+    feedadded = Feed.objects.create(feed_user = request.user, feed_status = 15,feed_service = service, feed_date= dateadded)
+    feedadded.save()
     service.applied_ones.remove(request.user)
     service.save()
     user.credit = user.credit + service.credit
     user.onholdcredit = user.onholdcredit - service.credit
     user.save()
+    
     messages.success(request, ("Successfully cancelled"))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
  
@@ -363,6 +416,9 @@ def cancel_service(request, service_id):
 def cancel_event(request, event_id):
     user = request.user
     event = Event.objects.get(pk = event_id)
+    dateadded = datetime.datetime.now()
+    feedadded = Feed.objects.create(feed_user = request.user, feed_status = 16,feed_event = event, feed_date= dateadded)
+    feedadded.save()
     event.applied_ones.remove(request.user)
     event.save()
     user.save()
@@ -376,6 +432,9 @@ def confirm_applied(request, service_id, user_id):
     service = Service.objects.get(pk = service_id)
     service.applied_ones.remove(applied_user)
     service.attendees.add(applied_user)
+    dateadded = datetime.datetime.now()
+    feedadded = Feed.objects.create(feed_user = request.user, feed_user2 = applied_user, feed_status = 9,feed_service = service, feed_date= dateadded)
+    feedadded.save()
     service.provider.credit = service.provider.credit + service.credit
     service.provider.save()
     service.status = 3
@@ -402,6 +461,9 @@ def confirm_applied_event(request, event_id, user_id):
     event = Event.objects.get(pk = event_id)
     event.applied_ones.remove(applied_user)
     event.attendees.add(applied_user)
+    dateadded = datetime.datetime.now()
+    feedadded = Feed.objects.create(feed_user = request.user, feed_user2 = applied_user, feed_status = 17,feed_event = event, feed_date= dateadded)
+    feedadded.save()
     applied_user.save()
     event.capacity = event.capacity - 1
 
@@ -448,11 +510,48 @@ class ShowProfilePageView(DetailView):
     model = User
     template_name = 'general_profile.html'
 
+    
+
     def get_context_data(self, *args, **kwargs):
-        users = User.objects.all()
+        
+        
+        
         context = super(ShowProfilePageView, self).get_context_data(*args, **kwargs)
 
         page_user = get_object_or_404(User, id=self.kwargs['pk'])
 
         context["page_user"] = page_user
         return context
+
+
+def follow_user(request, user_id):
+    user = request.user
+    following_user = User.objects.get(pk = user_id)
+    dateadded = datetime.datetime.now()
+    feedadded = Feed.objects.create(feed_user = request.user, feed_user2 = following_user, feed_status = 3, feed_date = dateadded)
+    feedadded.save()
+    following_user.followers.add(user)
+    following_user.numberoffollowers = following_user.numberoffollowers + 1
+    following_user.save()
+      
+
+        
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def unfollow_user(request, user_id):
+    user = request.user
+    following_user = User.objects.get(pk = user_id)
+    dateadded = datetime.datetime.now()
+    feedadded = Feed.objects.create(feed_user = request.user, feed_user2 = following_user, feed_status = 4, feed_date = dateadded)
+    feedadded.save()  
+
+    following_user.followers.remove(user)
+    following_user.numberoffollowers = following_user.numberoffollowers - 1
+    following_user.save()
+    
+        
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def feed(request):
+    feed_list = Feed.objects.order_by('-feed_date')
+    return render(request, 'feed.html', {'feed_list': feed_list })

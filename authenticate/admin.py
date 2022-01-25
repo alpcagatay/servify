@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
 from django.contrib.auth.forms import UserChangeForm as DefaultUserChangeForm
 from django.contrib.auth.forms import UserCreationForm as DefaultUserCreationForm
 
-from .models import User, Event, Service, Measurement
+from .models import User, Event, Service, Measurement, Feed
 
 
 class UserCreationFrom(DefaultUserCreationForm):
@@ -21,7 +21,7 @@ class UserAdmin(DefaultUserAdmin):
     model = User
     add_form = UserCreationFrom
     form = UserChangeFrom
-    list_display = ["username", "is_active", "email", "credit", "onholdcredit"]
+    list_display = ["username", "is_active", "email", "credit", "onholdcredit","numberoffollowers"]
     exclude = (
         "groups",
         "is_staff",
@@ -55,6 +55,8 @@ class UserAdmin(DefaultUserAdmin):
                 "profile_picture",
                 "last_name",
                 "password",
+                "numberoffollowers",
+                "followers"
             ),
         },
     )
@@ -110,3 +112,4 @@ admin.site.register(Measurement)
 admin.site.register(Service)
 admin.site.register(Event)
 admin.site.register(User, UserAdmin)
+admin.site.register(Feed)

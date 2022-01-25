@@ -38,6 +38,8 @@ urlpatterns = [
     path('cancel_event/<event_id>', views.cancel_event, name="cancel_event"),
     path('confirm_applied_event/<event_id>/<user_id>', views.confirm_applied_event, name="confirm_applied_event"),
     path('<int:pk>/profile/', views.ShowProfilePageView.as_view(), name="show_profile_page"),
-
+    path('follow_user/<user_id>', views.follow_user, name="follow_user"),
+    path('unfollow_user/<user_id>', views.unfollow_user, name="unfollow_user"),
+    path('feed', views.feed, name="feed"),
 
 ]

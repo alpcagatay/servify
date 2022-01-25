@@ -29,6 +29,16 @@ Last name: <strong>{{page_user.last_name}}</strong>
 Bio: <strong>{{page_user.bio}}</strong>
 <br>
 
+Followers: <strong>{{page_user.numberoffollowers}}</strong>
+<br>
+
+
+<a href="{% url 'follow_user' user.id %}" class= "btn btn-outline-secondary btn-sm">Follow</a>
+
+
+<a href="{% url 'unfollow_user' user.id %}" class= "btn btn-outline-danger btn-sm">Unfollow</a>
+
+
 
 
 
