@@ -37,9 +37,10 @@ Followers: <strong>{{page_user.numberoffollowers}}</strong>
 
 
 <a href="{% url 'unfollow_user' user.id %}" class= "btn btn-outline-danger btn-sm">Unfollow</a>
+<br>
+Provided Services:
 
-
-
+{{page_user.services}}
 
 
 

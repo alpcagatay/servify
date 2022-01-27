@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
 from django.db.models.base import Model
 from django.forms import fields, ModelForm, widgets
-from .models import Service, Event, Final_Event_Status, Final_Service_Status
+from .models import Service, Event, Final_Event_Status, Final_Service_Status, Comment
 
 
 from django.contrib.auth import get_user_model
@@ -109,3 +109,14 @@ class EventForm(ModelForm):
             'description': forms.Textarea(attrs={'class':'form-control','placeholder':'Description'}),
             'venue': forms.TextInput(attrs={'class':'form-control','placeholder':'Venue'}),
        }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields =  ('body',)
+        labels = {
+            'body':'',
+        }
+        widgets= {
+            'body': forms.TextInput(attrs={'class':'form-control','placeholder':'Comment'}),
+        }  

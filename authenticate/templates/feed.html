@@ -81,6 +81,15 @@
 
 <li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> approved <a href="{% url 'show_profile_page' feed.feed_user2.id %}"> {{feed.feed_user2}}</a>'s application to {{feed.feed_service.name}} </li> 
 
+{% elif feed.feed_status == 18 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> commented on  <a href="{% url 'show_service' feed.feed_service.id %}"> {{feed.feed_service.name}}</a>  service </li> 
+
+{% elif feed.feed_status == 19 %}
+
+<li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> commented on  <a href="{% url 'show_event' feed.feed_event.id %}"> {{feed.feed_event.name}}</a>  event </li> 
+
+
 
 
     {% endif %}

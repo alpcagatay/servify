@@ -5,16 +5,16 @@
 
 
     <center>
-    <h1>Add Service</h1>
+    <h1>Add Comment</h1>
     
         <br/><br>
         {% if submitted %}
-            Your service was submitted succesfully!
+            Your comment was submitted succesfully!
         {% else %}
         
      
     
-        <form action="" method = POST enctype="multipart/form-data" >
+        <form method = "POST" action="{% url 'submit_comment'  %}"   >
         {% csrf_token %}
 
         {{ form.as_p }}

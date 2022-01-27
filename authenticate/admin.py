@@ -1,9 +1,10 @@
+from xml.etree.ElementTree import Comment
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
 from django.contrib.auth.forms import UserChangeForm as DefaultUserChangeForm
 from django.contrib.auth.forms import UserCreationForm as DefaultUserCreationForm
 
-from .models import User, Event, Service, Measurement, Feed
+from .models import User, Event, Service, Measurement, Feed, Comment
 
 
 class UserCreationFrom(DefaultUserCreationForm):
@@ -113,3 +114,4 @@ admin.site.register(Service)
 admin.site.register(Event)
 admin.site.register(User, UserAdmin)
 admin.site.register(Feed)
+admin.site.register(Comment)

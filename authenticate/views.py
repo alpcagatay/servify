@@ -6,10 +6,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
-from .forms import EditProfileForm, EventForm, ServiceForm, SignUpForm
+from .forms import EditProfileForm, EventForm, ServiceForm, SignUpForm, CommentForm
 from urllib.parse import urlencode
 from urllib.parse import urlparse, parse_qsl
-from .models import Event, Feed, Service
+from .models import Event, Feed, Service, Comment
 from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.contrib import messages
@@ -24,6 +24,9 @@ User = get_user_model()
 # Create your views here.
 def home(request):
     return render(request,'home.html',{})
+
+def location(request):
+    return render(request,'location.html',{})
 
 def login_user(request):
     if request.method == 'POST':
@@ -318,29 +321,64 @@ def show_service(request, service_id):
         is_user_applied = Service.objects.filter(pk = service_id, applied_ones=user).exists()
         can_user_apply = user.credit >= service.credit
         assigned_user =  service.attendees.first()
-        return render(request, 'show_service.html', {
+
+        if request.method == "POST":
+            comment_form = CommentForm(request.POST or None)
+            if comment_form.is_valid():
+                body = request.POST.get('body')
+                comment = Comment.objects.create(servicecom = service, usercomment = user, body=body)
+                comment.save()
+                dateadded = datetime.datetime.now()
+                feedadded = Feed.objects.create(feed_user = user, feed_status = 18, feed_service = service, feed_date= dateadded)
+                feedadded.save()
+
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        else:
+            comment_form = CommentForm()
+        return render(request,'show_service.html',{    
             'service': service, 
             "is_user_applied": is_user_applied, 
             "can_user_apply": can_user_apply, 
-            "assigned_user": assigned_user 
+            "assigned_user": assigned_user,
+            "comment_form":comment_form 
         })
+
     except Service.objects.get(pk = service_id).DoesNotExist:
         render(request, 'list_services.html')
         messages.success(request, ("The service does not exist anymore"))
+
+
 @login_required
 def show_event(request, event_id):
     try:
-
         user = request.user
         event = Event.objects.get(pk = event_id)
         is_user_applied = Event.objects.filter(pk = event_id, applied_ones=user).exists()
         can_user_apply = event.capacity >= 1
         assigned_user =  event.attendees.first()
+
+        if request.method == "POST":
+            comment_form = CommentForm(request.POST or None)
+            if comment_form.is_valid():
+                body = request.POST.get('body')
+                comment = Comment.objects.create(eventcom = event, usercomment = user, body=body)
+                comment.save()
+                dateadded = datetime.datetime.now()
+                feedadded = Feed.objects.create(feed_user = user, feed_status = 19, feed_event = event, feed_date= dateadded)
+                feedadded.save()
+
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+        else:
+            comment_form = CommentForm()
+
         return render(request, 'show_event.html', {
             'event': event, 
             "is_user_applied": is_user_applied, 
             "can_user_apply": can_user_apply, 
-            "assigned_user": assigned_user 
+            "assigned_user": assigned_user,
+            "comment_form":comment_form 
+
     })
     except Event.object.get(pk=event_id).DoesNotExist:
         
@@ -555,3 +593,5 @@ def unfollow_user(request, user_id):
 def feed(request):
     feed_list = Feed.objects.order_by('-feed_date')
     return render(request, 'feed.html', {'feed_list': feed_list })
+
+

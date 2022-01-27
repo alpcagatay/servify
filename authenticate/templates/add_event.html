@@ -16,7 +16,70 @@
         <form action="" method = POST enctype="multipart/form-data">
         {% csrf_token %}
 
-        {{ form.as_p }}
+        
+        {{ form.name }}
+        <br>
+        {{ form.date }}
+        <br>
+        {{ form.time }}
+        <br>
+        <br>
+
+        {{ form.description }}
+        <br>
+        Capacity: {{ form.capacity }}
+        <br>
+        <br>
+        {{ form.event_picture }}
+        <br>
+        <br>
+        {{ form.venue }}
+            <br>
+        
+
+
+    <style type="text/css">
+      
+        #map {
+             height: 250px;
+             
+             width: 75%;
+     
+         }
+         </style>
+         <script>
+           // Initialize and add the map
+           function initMap() {
+             // The location of Uluru
+             const bogazici = { lat: 41.083556, lng: 29.050598};
+             const hacettepe = { lat: 41.083556, lng: 29.050598};
+             // The map, centered at Uluru
+             const map = new google.maps.Map(document.getElementById("map"), {
+               zoom: 12,
+               center: bogazici,
+             });
+             // The marker, positioned at Uluru
+             const marker = new google.maps.Marker({
+               position: bogazici,
+               map: map,
+             });
+           }
+         </script>
+       </head>
+       <body>
+     
+         <!--The div element for the map -->
+         <div id="map"></div>
+     
+         <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+         <script
+           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6k5eadUusSfdDx5GzCXFW_HlBekTN_VU&callback=initMap&libraries=&v=weekly"
+           async
+         ></script>
+       </body>
+     
+     
+<br>
 
         <input type = "submit" value="Submit" class="btn btn-secondary"> 
 

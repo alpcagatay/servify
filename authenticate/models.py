@@ -194,5 +194,14 @@ class Feed(models.Model):
     feed_service = models.ForeignKey(Service, default = "", null=True, blank=True, on_delete=models.CASCADE, related_name='feed_service')
     feed_event = models.ForeignKey(Event, default = "", null=True, blank=True, on_delete=models.CASCADE, related_name='feed_event')
     feed_date = models.DateTimeField()
-    choices = ((1, 'registered'),(2,'logged in'),(3,'followed'),(4,'unfollowed'), (5,'created an event'),(6,'created a service'),(7,'applied service'),(8,'applied event'),(9,'confirmed'), (10, 'updated event'),(11,'deleted an event'),(12,('edited profile information')), (13, 'updated service'), (14, 'deleted a service'), (15,'canceled application'), (16,('cancelled application to an event')),(17,('confirmed event')))
+    choices = ((1, 'registered'),(2,'logged in'),(3,'followed'),(4,'unfollowed'), (5,'created an event'),(6,'created a service'),(7,'applied service'),(8,'applied event'),(9,'confirmed'), (10, 'updated event'),(11,'deleted an event'),(12,('edited profile information')), (13, 'updated service'), (14, 'deleted a service'), (15,'canceled application'), (16,('cancelled application to an event')),(17,('confirmed event')),(18,('commented on')),(18,('commented on event')))
     feed_status = models.PositiveIntegerField(choices=choices)
+
+class Comment(models.Model):
+    servicecom = models.ForeignKey(Service, default = "", null=True, blank=True, on_delete=models.CASCADE, related_name='scomments')
+    eventcom = models.ForeignKey(Event, default = "", null=True, blank=True, on_delete=models.CASCADE, related_name='ecomments')
+    usercomment = models.ForeignKey("authenticate.User",default = "", null=True, blank=True, on_delete=models.CASCADE, related_name='user_commented')
+    body = models.TextField()
+    datecomment = models.DateTimeField(auto_now_add=True)
+
+    

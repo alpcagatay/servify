@@ -41,5 +41,6 @@ urlpatterns = [
     path('follow_user/<user_id>', views.follow_user, name="follow_user"),
     path('unfollow_user/<user_id>', views.unfollow_user, name="unfollow_user"),
     path('feed', views.feed, name="feed"),
-
+    path('location', views.location, name="location"),
+    
 ]

@@ -79,7 +79,7 @@
                     </div>
                   {% else %}
                     <span>
-                      yetersiz kredi
+                      unsufficient credit                    
                     </span>
                   {% endif %}
                 {% endif %}
@@ -94,5 +94,43 @@
                 {% endif %}
           
               {% endif %}
+<br><br>
+
+<div class="card">
+  <div class = "card-header">
+
+
+<form method = "POST">
+{% csrf_token %}
+{{comment_form.as_p}}
+<input type = "submit" value = "Submit" class = "btn btn-outline-success">
+</form>
+<br><br>
+     <h3>Comments</h3> 
+     <br>
+      <br>
+    {% for ecomment in event.ecomments.all %}
+    
+    <strong><ul>{{ecomment.body}}</strong></ul>
+{%if ecomment.usercomment.profile_picture %}
+    <img src={{ecomment.usercomment.profile_picture.url}} class="rounded-circle" width = 25 height= auto> <font size = "-1"> <a href="{% url 'show_profile_page' ecomment.usercomment.id %}">{{ecomment.usercomment}}</a> </font>
+{% else %}
+<font size = "-1"> <a href="{% url 'show_profile_page' ecomment.usercomment.id %}">{{ecomment.usercomment}}</a> </font>
+{% endif %}
+     
+{% endfor %}
+
+
+
+  <div/>
+  <div/>
+
+
+
+
+
+
+
+
               {% endblock %}
           

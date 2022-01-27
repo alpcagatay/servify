@@ -62,6 +62,7 @@
         <div>
           <a href="{% url 'cancel_service' service.id %}" class= "btn btn-outline-secondary btn-sm">Cancel</a>
         </div>
+        
       {% else %}
         {% if can_user_apply %}
           <div>
@@ -69,7 +70,7 @@
           </div>
         {% else %}
           <span>
-            yetersiz kredi
+            unsufficient credit
           </span>
         {% endif %}
       {% endif %}
@@ -82,9 +83,39 @@
           <span>Assinged to another user</span>
           {% endif %}
       {% endif %}
+<br>
+{% endif %}
+<br><br>
+{% comment %} <a href="{% url 'add_comment' service.id %}">Add Comment</a> {% endcomment %}
 
-    {% endif %}
- 
+  <div class="card">
+    <div class = "card-header">
+
+
+<form method = "POST">
+  {% csrf_token %}
+  {{comment_form.as_p}}
+  <input type = "submit" value = "Submit" class = "btn btn-outline-success">
+</form>
+<br><br>
+       <h3>Comments</h3> 
+       <br>
+        <br>
+      {% for scomment in service.scomments.all %}
+      
+      <strong><ul>{{scomment.body}}</strong></ul>
+{%if scomment.usercomment.profile_picture %}
+      <img src={{scomment.usercomment.profile_picture.url}} class="rounded-circle" width = 25 height= auto> <font size = "-1"> <a href="{% url 'show_profile_page' scomment.usercomment.id %}">{{scomment.usercomment}}</a> </font>
+{% else %}
+<font size = "-1"> <a href="{% url 'show_profile_page' scomment.usercomment.id %}">{{scomment.usercomment}}</a> </font>
+{% endif %}
+       
+{% endfor %}
+
+
+  
+    <div/>
+    <div/>
 
 
     <!-- {% if service.service_picture %}
