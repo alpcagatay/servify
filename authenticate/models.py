@@ -10,6 +10,8 @@ from django.forms.models import ModelForm
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils import timezone
+from location_field.models.plain import PlainLocationField
+
 
 
 # Create your models here.
@@ -130,7 +132,8 @@ class Service(models.Model):
     attendees = models.ManyToManyField("authenticate.User",default="", blank=True, related_name='service_attendees')
     others = models.ManyToManyField("authenticate.User", default="", blank=True, related_name='service_others')
     service_picture = models.ImageField(null=True, blank=True, upload_to = "images/")
-
+    cityname = models.CharField(max_length=255, default='Ankara')
+    location = PlainLocationField(based_fields=['cityname'], zoom=8, default = 'Ankara')
 
     ChoicesForService = ((1,'Open'),(2,'Closed'),(3,'Done'))
     status = models.PositiveIntegerField(choices=ChoicesForService, default = 1)
@@ -153,6 +156,8 @@ class Event(models.Model):
     others = models.ManyToManyField("authenticate.User", default="", blank=True, related_name='event_others')
     event_picture = models.ImageField(null=True, blank=True, upload_to = "images/")
     capacity = models.PositiveIntegerField(default=10)
+    cityname = models.CharField(max_length=255, default='Ankara')
+    location = PlainLocationField(based_fields=['cityname'], zoom=8, default = 'Ankara')
 
 
     ChoicesForService = ((1,'Open'),(2,'Closed'),(3,'Done'))
@@ -204,4 +209,19 @@ class Comment(models.Model):
     body = models.TextField()
     datecomment = models.DateTimeField(auto_now_add=True)
 
-    
+
+class Place(models.Model):
+    city = models.CharField(max_length=255)
+    location = PlainLocationField(based_fields=['city'], zoom=7, default = 'Ankara')
+
+
+# class Place(models.Model):
+#     parent_place = models.ForeignKey(
+#         'self',
+#         null=True,
+#         blank=True,
+#         on_delete=models.CASCADE,
+#     )
+
+#     city = models.CharField(max_length=255)
+   

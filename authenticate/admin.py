@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
 from django.contrib.auth.forms import UserChangeForm as DefaultUserChangeForm
 from django.contrib.auth.forms import UserCreationForm as DefaultUserCreationForm
 
-from .models import User, Event, Service, Measurement, Feed, Comment
+from .models import User, Event, Service, Measurement, Feed, Comment, Place
 
 
 class UserCreationFrom(DefaultUserCreationForm):
@@ -115,3 +115,7 @@ admin.site.register(Event)
 admin.site.register(User, UserAdmin)
 admin.site.register(Feed)
 admin.site.register(Comment)
+
+
+
+admin.site.register(Place)

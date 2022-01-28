@@ -65,7 +65,7 @@ class SignUpForm(UserCreationForm):
 class ServiceForm(ModelForm):
     class Meta:
         model = Service
-        fields =  ('name','date','time','description','venue','credit', 'service_picture')
+        fields =  ('name','date','time','description','venue','credit', 'service_picture','cityname','location')
         labels = {
             'name':'',
             'date':'',
@@ -73,7 +73,9 @@ class ServiceForm(ModelForm):
             'description':'',
             'venue':'',
             'credit':'',
-            'service_picture':''
+            'service_picture':'',
+            'cityname':'',
+            'location':''
         }
         widgets= {
             'name': forms.TextInput(attrs={'class':'form-control','placeholder':'Service Name'}),
@@ -91,7 +93,7 @@ class EventForm(ModelForm):
     class Meta:
 
         model = Event
-        fields =  ('name','date','time','description','venue','event_picture','capacity')
+        fields =  ('name','date','time','description','venue','event_picture','capacity','cityname','location')
         labels = {
             'name':'',
             'date':'',
@@ -100,7 +102,10 @@ class EventForm(ModelForm):
             'venue':'',
             'credit':'',
             'event_picture':'',
-            'capacity':'Capacity'
+            'capacity':'Capacity',
+            'cityname':'',
+            'location':''
+
         }
         widgets= {
             'name': forms.TextInput(attrs={'class':'form-control','placeholder':'Event Name'}),

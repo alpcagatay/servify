@@ -9,7 +9,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, Password
 from .forms import EditProfileForm, EventForm, ServiceForm, SignUpForm, CommentForm
 from urllib.parse import urlencode
 from urllib.parse import urlparse, parse_qsl
-from .models import Event, Feed, Service, Comment
+from .models import Event, Feed, Service, Comment, Place
 from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.contrib import messages
@@ -17,6 +17,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.views.generic import CreateView
+
 
 
 User = get_user_model()
@@ -595,3 +597,9 @@ def feed(request):
     return render(request, 'feed.html', {'feed_list': feed_list })
 
 
+class PlaceCreateView(CreateView):
+    model = Place
+    fields = (
+        'city',
+        'location',
+    )
