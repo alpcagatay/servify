@@ -10,6 +10,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 
+from django.conf import settings
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -135,33 +137,35 @@ STATICFILER_DIRS = (os.path.join(BASE_DIR, 'static')),
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOCATION_FIELD_PATH = STATIC_URL + 'location_field'
+
+LOCATION_FIELD_PATH = settings.STATIC_URL + 'location_field'
 
 LOCATION_FIELD = {
     'map.provider': 'google',
     'map.zoom': 13,
 
     'search.provider': 'google',
+    'search.suffix': '',
 
-#     # Google   
+    # Google
     'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
-    'provider.google.api_key': 'AIzaSyC831GVdP_QifDwPtWqwRaqcKDhfH0RSfQ',
+    'provider.google.api_key': 'AIzaSyA_Oz2YRSHC43tA4LjDabFl1hSabnr0xy0',
     'provider.google.api_libraries': '',
     'provider.google.map.type': 'ROADMAP',
+
+    # Mapbox
+    'provider.mapbox.access_token': '',
+    'provider.mapbox.max_zoom': 18,
+    'provider.mapbox.id': 'mapbox.streets',
+
+    # OpenStreetMap
+    'provider.openstreetmap.max_zoom': 18,
+
+    # misc
+    'resources.root_path': LOCATION_FIELD_PATH,
+    'resources.media': {
+        'js': (
+            LOCATION_FIELD_PATH + '/js/form.js',
+        ),
+    },
 }
-#     # Mapbox
-#     'provider.mapbox.access_token': '',
-#     'provider.mapbox.max_zoom': 18,
-#     'provider.mapbox.id': 'mapbox.streets',
-
-#     # OpenStreetMap
-#     'provider.openstreetmap.max_zoom': 18,
-
-#     # misc
-#     'resources.root_path': LOCATION_FIELD_PATH,
-#     'resources.media': {
-#         'js': (
-#             LOCATION_FIELD_PATH + '/js/form.js',
-#         ),
-#     },
-# 

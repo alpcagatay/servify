@@ -84,6 +84,7 @@ class ServiceForm(ModelForm):
             'description': forms.Textarea(attrs={'class':'form-control','placeholder':'Description'}),
             'venue': forms.TextInput(attrs={'class':'form-control','placeholder':'Venue'}),
             'credit':forms.TextInput(attrs={'placeholder': 'Total Credit'}),
+            'cityname': forms.TextInput(attrs={'class':'form-control','placeholder':'Service Name'}),
               }
 
 
@@ -113,6 +114,9 @@ class EventForm(ModelForm):
             'time': forms.TimeInput(attrs={'type':'time'}),
             'description': forms.Textarea(attrs={'class':'form-control','placeholder':'Description'}),
             'venue': forms.TextInput(attrs={'class':'form-control','placeholder':'Venue'}),
+            'cityname': forms.TextInput(attrs={'class':'form-control','placeholder':'Event Name'}),
+            
+
        }
 
 class CommentForm(forms.ModelForm):

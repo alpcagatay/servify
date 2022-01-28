@@ -157,7 +157,7 @@ class Event(models.Model):
     event_picture = models.ImageField(null=True, blank=True, upload_to = "images/")
     capacity = models.PositiveIntegerField(default=10)
     cityname = models.CharField(max_length=255, default='Ankara')
-    location = PlainLocationField(based_fields=['cityname'], zoom=8, default = 'Ankara')
+    location = PlainLocationField(based_fields=['cityname'], zoom=8)
 
 
     ChoicesForService = ((1,'Open'),(2,'Closed'),(3,'Done'))

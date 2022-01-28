@@ -26,9 +26,11 @@
           
           <li>on <strong>{{event.date}}</strong> at <strong>{{event.time}}</strong></li>
           <li>Remaining Capacity: {{event.capacity}}</li> 
-
+          {% if user.profile_picture %}
           <li>Provided by:    </strong><a href="{% url 'show_profile_page' event.provider.id %}">{{event.provider}}</a></strong> <img src={{event.provider.profile_picture.url}} class="rounded-circle" width = 25 height= auto></li>
-          
+          {% else %}
+          <li>Provided by:    </strong><a href="{% url 'show_profile_page' event.provider.id %}">{{event.provider}}</a></strong> </li>
+          {% endif %}
       </ul>
 
     </p>
