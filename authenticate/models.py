@@ -1,3 +1,4 @@
+from email.policy import default
 from django import forms
 from django.core import validators
 from django.db import models
@@ -5,7 +6,7 @@ import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models.fields import related
 from django.db.models.fields.related import ManyToManyField
-from django.forms import widgets
+from django.forms import IntegerField, widgets
 from django.forms.models import ModelForm
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -124,7 +125,6 @@ class Service(models.Model):
     date = models.DateField('Service Date', blank=True, null = True)
     time = models.TimeField(default='12:00')
     description=models.TextField()
-    venue = models.CharField('Venue Name', max_length=120)
     credit = models.PositiveIntegerField()
     service_picture = models.ImageField(null=True, blank=True)
     provider = models.ForeignKey("authenticate.User", on_delete=models.CASCADE, related_name='service_provider')
@@ -133,7 +133,7 @@ class Service(models.Model):
     others = models.ManyToManyField("authenticate.User", default="", blank=True, related_name='service_others')
     service_picture = models.ImageField(null=True, blank=True, upload_to = "images/")
     cityname = models.CharField(max_length=255, default='Ankara')
-    location = PlainLocationField(based_fields=['cityname'], zoom=8, default = 'Ankara')
+    location = PlainLocationField(based_fields=['cityname'], zoom=8)
 
     ChoicesForService = ((1,'Open'),(2,'Closed'),(3,'Done'))
     status = models.PositiveIntegerField(choices=ChoicesForService, default = 1)
@@ -147,7 +147,6 @@ class Event(models.Model):
     date = models.DateField('Event Date', blank=True, null = True)
     time = models.TimeField(default='12:00')
     description=models.TextField()
-    venue = models.CharField('Venue Name', max_length=120)
     credit = models.PositiveIntegerField(default=0)
     service_picture = models.ImageField(null=True, blank=True)
     provider = models.ForeignKey("authenticate.User", on_delete=models.CASCADE, related_name='event_provider')
@@ -158,8 +157,7 @@ class Event(models.Model):
     capacity = models.PositiveIntegerField(default=10)
     cityname = models.CharField(max_length=255, default='Ankara')
     location = PlainLocationField(based_fields=['cityname'], zoom=8)
-
-
+   
     ChoicesForService = ((1,'Open'),(2,'Closed'),(3,'Done'))
     status = models.PositiveIntegerField(choices=ChoicesForService, default = 1)
 

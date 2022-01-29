@@ -1,3 +1,4 @@
+from email.policy import default
 from django.contrib.auth import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 # from django.contrib.auth.models import User 
@@ -5,6 +6,7 @@ from django import forms
 from django.db.models.base import Model
 from django.forms import fields, ModelForm, widgets
 from .models import Service, Event, Final_Event_Status, Final_Service_Status, Comment
+from location_field.models.plain import PlainLocationField
 
 
 from django.contrib.auth import get_user_model
@@ -65,13 +67,12 @@ class SignUpForm(UserCreationForm):
 class ServiceForm(ModelForm):
     class Meta:
         model = Service
-        fields =  ('name','date','time','description','venue','credit', 'service_picture','cityname','location')
+        fields =  ('name','date','time','description','credit', 'service_picture','cityname','location')
         labels = {
             'name':'',
             'date':'',
             'time':'',
             'description':'',
-            'venue':'',
             'credit':'',
             'service_picture':'',
             'cityname':'',
@@ -82,25 +83,25 @@ class ServiceForm(ModelForm):
             'date': forms.TextInput(attrs={'type':'date','class':'form-control','placeholder':''}),
             'time': forms.TimeInput(attrs={'type':'time'}),
             'description': forms.Textarea(attrs={'class':'form-control','placeholder':'Description'}),
-            'venue': forms.TextInput(attrs={'class':'form-control','placeholder':'Venue'}),
             'credit':forms.TextInput(attrs={'placeholder': 'Total Credit'}),
-            'cityname': forms.TextInput(attrs={'class':'form-control','placeholder':'Service Name'}),
+            'cityname': forms.TextInput(attrs={'class':'form-control','placeholder':'Service Place'}),
               }
 
 
     
 
 class EventForm(ModelForm):
-    class Meta:
+    location = PlainLocationField(based_fields=['cityname'], default='Boğaziçi')
 
+    
+    class Meta:
         model = Event
-        fields =  ('name','date','time','description','venue','event_picture','capacity','cityname','location')
+        fields =  ('name','date','time','description','event_picture','capacity','cityname','location')
         labels = {
             'name':'',
             'date':'',
             'time':'',
             'description':'',
-            'venue':'',
             'credit':'',
             'event_picture':'',
             'capacity':'Capacity',
@@ -113,8 +114,7 @@ class EventForm(ModelForm):
             'date': forms.TextInput(attrs={'type':'date','class':'form-control','placeholder':''}),
             'time': forms.TimeInput(attrs={'type':'time'}),
             'description': forms.Textarea(attrs={'class':'form-control','placeholder':'Description'}),
-            'venue': forms.TextInput(attrs={'class':'form-control','placeholder':'Venue'}),
-            'cityname': forms.TextInput(attrs={'class':'form-control','placeholder':'Event Name'}),
+            'cityname': forms.TextInput(attrs={'class':'form-control','placeholder':'Event Place'}),
             
 
        }

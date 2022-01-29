@@ -25,6 +25,54 @@
     <p>Venue: <strong>{{service.venue}}</strong></p>
     <p>Provided by: <a href="{% url 'show_profile_page' service.provider.id %}"><strong>{{service.provider}}</strong><img src={{service.provider.profile_picture.url}} class="rounded-circle" width = 25 height= auto></p></a> 
     <p>Credit: <strong>{{service.credit}}</strong></p>
+
+    
+<br>
+
+
+    <title>Add Map</title>
+
+    <style type="text/css">
+      /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;
+        /* The height is 400 pixels */
+        width: 100%;
+        /* The width is the width of the web page */
+      }
+    </style>
+    <script>
+      // Initialize and add the map
+      function initMap() {
+        // The location of Uluru
+        const loc = { lat:  {{service.location|slice:"10"}}, lng: {{service.location|slice:"11:"}} };
+        // The map, centered at Uluru
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 16,
+          center: loc,
+        });
+        // The marker, positioned at Uluru
+        const marker = new google.maps.Marker({
+          position: loc,
+          map: map,
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <h3>Location</h3>
+    <br>
+    <!--The div element for the map -->
+    <div id="map"></div>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_Oz2YRSHC43tA4LjDabFl1hSabnr0xy0&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+  </body>
+
+
     
     {% if user == service.provider  %}
       <div>

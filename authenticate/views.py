@@ -279,7 +279,7 @@ def list_events(request):
 def search_results(request):
     if request.method == "POST":
         searched = request.POST['searched']
-        result = Service.objects.filter(Q(description__contains=searched)| Q(name__contains=searched) | Q(venue__contains=searched) )
+        result = Service.objects.filter(Q(description__contains=searched)| Q(name__contains=searched)  )
         
         return render(request, 'search_results.html', {'searched':searched, 'result':result })
     else:
@@ -289,7 +289,7 @@ def search_results(request):
 def search_result_events(request):
     if request.method == "POST":
         looked = request.POST['looked']
-        outcome = Event.objects.filter(Q(description__contains=looked)| Q(name__contains=looked) | Q(venue__contains=looked) )
+        outcome = Event.objects.filter(Q(description__contains=looked)| Q(name__contains=looked) | Q(cityname__contains=looked)   )
         return render(request, 'search_result_events.html', {'looked':looked, 'outcome':outcome })
     else:
         return render(request, 'search_result_events.html', {})

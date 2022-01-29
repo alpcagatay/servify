@@ -24,8 +24,14 @@
           
           <li>on <strong>{{service.date}}</strong> at <strong>{{service.time}}</strong></li>
           <li>Credit:         <strong>{{service.credit}}</strong></li>
+          {% if user.profile_picture %}
+
           <li>Provided by:    </strong><a href="{% url 'show_profile_page' service.provider.id %}">{{service.provider}}</a></strong> <img src={{service.provider.profile_picture.url}} class="rounded-circle" width = 25 height= auto></li>
-          
+          {% else %}
+          <li>Provided by:    </strong><a href="{% url 'show_profile_page' service.provider.id %}">{{service.provider}}</a></strong> </li>
+          {% endif %}
+
+
       </ul>
 
     </p>
