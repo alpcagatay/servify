@@ -2,8 +2,6 @@
 
 {% block content %}
 
-
-
     <center>
     <h1>Add Comment</h1>
     
@@ -11,8 +9,6 @@
         {% if submitted %}
             Your comment was submitted succesfully!
         {% else %}
-        
-     
     
         <form method = "POST" action="{% url 'submit_comment'  %}"   >
         {% csrf_token %}
