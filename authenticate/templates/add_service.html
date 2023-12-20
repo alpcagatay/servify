@@ -2,8 +2,6 @@
 
 {% block content %}
 
-
-
     <center>
     <h1>Add Service</h1>
     
@@ -11,9 +9,7 @@
         {% if submitted %}
             Your service was submitted succesfully!
         {% else %}
-        
      
-    
         <form action="" method = POST enctype="multipart/form-data" >
         {% csrf_token %}
 
