@@ -2,17 +2,13 @@
 
 {% block content %}
 
-
-
     <h1 class="text-center">Activity Feed</h1>
     <ul>
 {% for feed in feed_list %}
-    
         
     {% if feed.feed_status == 1 %}
     
 <li><a href="{% url 'show_profile_page' feed.feed_user.id %}">{{feed.feed_user}}</a> registered at {{feed.feed_date}}</li>   
-
     
     {% elif feed.feed_status == 2 %}
 
@@ -26,7 +22,6 @@
 
 <li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> unfollowed <a href="{% url 'show_profile_page' feed.feed_user2.id %}"> {{feed.feed_user2}}</a></li> 
 
-
 {% elif feed.feed_status == 5 %}
 
 <li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> created <a href="{% url 'show_event' feed.feed_event.id %}"> {{feed.feed_event.name}}</a> event at {{feed.feed_date}}</li> 
@@ -34,7 +29,6 @@
 {% elif feed.feed_status == 6 %}
 
 <li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> created <a href="{% url 'show_service' feed.feed_service.id %}"> {{feed.feed_service.name}}</a> service at {{feed.feed_date}}</li> 
-
 
 {% elif feed.feed_status == 10 %}
 
@@ -68,7 +62,6 @@
 
 <li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> cancelled application to {{feed.feed_service.name}} at {{feed.feed_date}} </li> 
 
-
 {% elif feed.feed_status == 16 %}
 
 <li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> cancelled application to {{feed.feed_event.name}} at {{feed.feed_date}} </li> 
@@ -88,9 +81,6 @@
 {% elif feed.feed_status == 19 %}
 
 <li> <a href="{% url 'show_profile_page' feed.feed_user.id %}"> {{feed.feed_user}}</a> commented on  <a href="{% url 'show_event' feed.feed_event.id %}"> {{feed.feed_event.name}}</a>  event </li> 
-
-
-
 
     {% endif %}
 
