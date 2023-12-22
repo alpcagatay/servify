@@ -2,16 +2,12 @@
 
 {% block content %}
 
-
 {% if looked %}
 
 <h1>You looked for {{looked}}</h1>
 <br>
 
-
 {% for outcomes in outcome %}
-   
-
 
     <div class="card">
       <div class="card-header">
@@ -48,15 +44,11 @@
         </p>
       </div>
     </div>
-
-
-
     
     {%endfor%}
 
 {% else %}
 <h1>Ooops, you did not make a search</h1>
 {% endif %}
-
 
   {% endblock %}
