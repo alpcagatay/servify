@@ -2,15 +2,12 @@
 {% load static %}
 {% block content %}
 
-
-
 <h1 class="text-center">User Profile</h1>
 <br>
 <h2>Hello {{user}}</h2>
 
 {% if user.profile_picture %}
 <img src="{{user.profile_picture.url}}" width = 100 height = auto class="rounded-circle">
-
 
 {% else %}
 <img src="servify\media\images\default.png" width = 300 class="rounded-circle">
@@ -33,11 +30,5 @@
   <br>
   Followers: <strong>{{user.numberoffollowers}}</strong>
 <br>
-
-
-
-
-
-
 
   {% endblock %}
