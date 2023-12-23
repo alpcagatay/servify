@@ -2,9 +2,6 @@
 
 {% block content %}
 
-
-
-    
         {% if user.is_authenticated %}
             {% if user == event.provider %}
 
@@ -34,7 +31,5 @@
             <a href="{%url 'login' %}">Login Here</a>
        {% endif %}
     </form>
-
-   
 
   {% endblock %}
