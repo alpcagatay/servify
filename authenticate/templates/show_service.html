@@ -2,7 +2,6 @@
 
 {% block content %}
 
-
 <div class="card">
     <div class = "card-header">
        <strong>{{ service }}</strong> 
@@ -12,7 +11,6 @@
      <h5 class = "card-title">  </h5>
     <p class="card-text">
     
-      
     {% if service.service_picture %}
     <img src="{{service.service_picture.url}}" width = 500>
     {% endif %}
@@ -25,10 +23,8 @@
     <p>Venue: <strong>{{service.venue}}</strong></p>
     <p>Provided by: <a href="{% url 'show_profile_page' service.provider.id %}"><strong>{{service.provider}}</strong><img src={{service.provider.profile_picture.url}} class="rounded-circle" width = 25 height= auto></p></a> 
     <p>Credit: <strong>{{service.credit}}</strong></p>
-
     
 <br>
-
 
     <title>Add Map</title>
 
@@ -72,8 +68,6 @@
     ></script>
   </body>
 
-
-    
     {% if user == service.provider  %}
       <div>
         <p>
@@ -105,7 +99,6 @@
     {% else %}
       {% if not assigned_user %}
 
-
       {% if is_user_applied %}
         <div>
           <a href="{% url 'cancel_service' service.id %}" class= "btn btn-outline-secondary btn-sm">Cancel</a>
@@ -122,7 +115,6 @@
           </span>
         {% endif %}
       {% endif %}
-
         
       {% else %}
           {% if user == assigned_user %}
@@ -138,7 +130,6 @@
 
   <div class="card">
     <div class = "card-header">
-
 
 <form method = "POST">
   {% csrf_token %}
@@ -160,11 +151,8 @@
        
 {% endfor %}
 
-
-  
     <div/>
     <div/>
-
 
     <!-- {% if service.service_picture %}
     {{service.service_image}}
